@@ -1,134 +1,91 @@
 const { db, auth } = require('../../firebaseConfig');
 const bcrypt = require('bcryptjs');
+const admin = require('firebase-admin');
+
 
 class User {
-  constructor(id, email, password) {
+  constructor(id, email, password) { 
     this.id = id;
     this.email = email;
-    this.password = password;
-  }
+    this.password = password; 
+}
 
-  // Cria um novo usuário
   static async create(email, password) {
     const hashedPassword = await bcrypt.hash(password, 10);
-
-    try {
-      // Criar usuário no Authentication
-      const createdUser = await auth.createUser({
-        email: email,
-        password: password
-      });
-
-      console.log(`Usuário criado no Firebase Auth: ${createdUser.uid}`);
-
-      // Salvar no Firestore
-      const userRef = db.collection('users').doc(createdUser.uid);
-      await userRef.set({
-        email,
-        password: hashedPassword
-      });
-
-      return new User(userRef.id, email, hashedPassword);
-    } catch (error) {
-      console.error("Erro ao criar usuário no Firebase Authentication:", error);
-      throw error;
-    }
+    const userRecord = await auth.createUser({
+      email,
+      password,
+    });
+    await db.collection('users').doc(userRecord.uid).set({
+      email,
+      password: hashedPassword,
+    });
+    return new User(userRecord.uid, email);
   }
 
-  // Busca um usuário pelo email
+  static async findById(id) {
+    const userDoc = await db.collection('users').doc(id).get();
+    if (!userDoc.exists) {
+      throw new Error('User not found');
+    }
+    const userData = userDoc.data();
+    return new User(id, userData.email);
+  }
+
   static async findByEmail(email) {
-    const userRef = db.collection('users').where('email', '==', email);
-    const snapshot = await userRef.get();
-
-    if (snapshot.empty) {
-      return null;
+    const userDoc = await db.collection('users').where('email', '==', email).limit(1).get();
+    if (userDoc.empty) {
+        return null; 
     }
+    const userData = userDoc.docs[0].data();
+    return new User(userDoc.docs[0].id, userData.email, userData.password); 
+}
 
-    let user;
-    snapshot.forEach(doc => {
-      user = new User(doc.id, doc.data().email, doc.data().password);
-    });
-
-    return user;
-  }
-
-  // Busca todos os usuários
   static async findAll() {
-    const usersRef = db.collection('users');
-    const snapshot = await usersRef.get();
-
-    if (snapshot.empty) {
-      return [];
-    }
-
-    const users = [];
-    snapshot.forEach(doc => {
-      users.push(new User(doc.id, doc.data().email, doc.data().password));
-    });
-
-    return users;
+    const usersSnapshot = await db.collection('users').get();
+    return usersSnapshot.docs.map(doc => new User(doc.id, doc.data().email));
   }
 
-  // Atualiza um usuário
-  static async update(id, email, password) {
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const userRef = db.collection('users').doc(id);
-
+  static async updatePassword(email, oldPassword, newPassword) {
     try {
-      // Atualizar no Firestore
-      await userRef.update({
-        email,
-        password: hashedPassword
-      });
-
-      console.log(`Usuário atualizado no Firestore: ${id}`);
-
-      // Atualizar na autenticação do Firebase
-      await auth.updateUser(id, {
-        email: email,
-        password: password
-      });
-
-      console.log(`Usuário atualizado no Firebase Auth: ${id}`);
-
-      const updatedDoc = await userRef.get();
-      const updatedUser = updatedDoc.data();
-
-      return new User(id, updatedUser.email, updatedUser.password);
+      // Verifique se o usuário existe
+      const userRecord = await admin.auth().getUserByEmail(email);
+  
+      // Autentique o usuário com o email e a senha antiga
+      await admin.auth().signInWithEmailAndPassword(email, oldPassword);
+  
+      // Atualize a senha do usuário
+      await admin.auth().updateUser(userRecord.uid, { password: newPassword });
+  
+      return { message: 'Senha atualizada com sucesso' };
     } catch (error) {
-      console.error("Erro ao atualizar usuário:", error);
-      throw error;
+      console.error('Erro ao atualizar a senha do usuário:', error);
+      throw new Error('Falha ao autenticar o usuário ou atualizar a senha');
     }
   }
+  
+  
+  
 
-  // Deleta um usuário
   static async delete(id) {
-    const userRef = db.collection('users').doc(id);
-
     try {
-      await userRef.delete();
-      console.log(`Usuário deletado do Firestore: ${id}`);
-
-      try {
-        // Tentar deletar da autenticação do Firebase
-        await auth.deleteUser(id);
-        console.log(`Usuário deletado do Firebase Auth: ${id}`);
-      } catch (authError) {
-        if (authError.code === 'auth/user-not-found') {
-          console.warn(`Usuário não encontrado no Firebase Auth: ${id}`);
-        } else {
-          throw authError;
-        }
-      }
+      // Exclui o usuário do Firebase Auth
+      await auth.deleteUser(id);
     } catch (error) {
-      console.error("Erro ao deletar usuário:", error);
-      throw error;
+      if (error.code === 'auth/user-not-found') {
+        // O usuário não existe no Firebase Auth, então pode ser que ele só exista no Firestore
+        // Exclui o usuário do Firestore
+        await db.collection('users').doc(id).delete();
+      } else {
+        throw error; // Lança a exceção caso não seja um erro de usuário não encontrado
+      }
     }
+    // Exclui o usuário do Firestore
+    await db.collection('users').doc(id).delete();
   }
 
-  // Compara a senha fornecida com a senha armazenada
-  static async comparePassword(plainPassword, hashedPassword) {
-    return bcrypt.compare(plainPassword, hashedPassword);
+  static async comparePassword(password, hashedPassword) {
+    return await bcrypt.compare(password, hashedPassword);
   }
 }
 

@@ -4,18 +4,20 @@ const AuthReducer = (state, action) => {
       return {
         ...state,
         currentUser: action.payload,
+        isLoading: false,
       };
     }
     case "LOGOUT": {
       return {
         ...state,
         currentUser: null,
+        isLoading: false,
       };
     }
-    case "TOGGLE": {
+    case "SET_LOADING": {
       return {
         ...state,
-        darkMode: !state.darkMode,
+        isLoading: action.payload,
       };
     }
     default:

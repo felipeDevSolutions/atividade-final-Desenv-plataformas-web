@@ -1,79 +1,66 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import Layout from '../../components/layout/Layout';
 import "../auth/signup.css";
-import "../auth/form.css"; // Importando o CSS compartilhado
+import "../auth/form.css";
+import Loading from '../../components/Loading/Loading';
+import Alerts, { showSuccessToast, showErrorToast } from '../../components/layout/Alerts'; // Importe as funções
 
 const Signup = () => {
   const navigate = useNavigate();
-  const [codigo, setCodigo] = useState("");
   const [emailSignup, setEmailSignup] = useState("");
   const [passwordSignup, setPasswordSignup] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [authorizationCode, setAuthorizationCode] = useState("");
-
-  useEffect(() => {
-    // Fetch authorization code when component mounts
-    axios.get('http://localhost:5000/api/authorization-code')
-      .then(response => {
-        setAuthorizationCode(response.data.authorizationCode);
-      })
-      .catch(error => {
-        console.error("Error fetching authorization code:", error);
-      });
-  }, []);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSignup = (e) => {
     e.preventDefault();
 
-    if (codigo !== authorizationCode) {
-      alert("Código de autorização incorreto.");
-      return;
-    }
-
     if (passwordSignup !== confirmPassword) {
-      alert("As senhas não coincidem.");
+      showErrorToast("As senhas não estão iguais.");
       return;
     }
+    
+    setIsLoading(true);
 
-    axios.post('http://localhost:5000/api/signup', {
-      authorizationCode: codigo,
+    axios.post('http://localhost:5000/api/signup', { // URL correta
       email: emailSignup,
       password: passwordSignup
     })
       .then(response => {
-        alert("Usuário cadastrado com sucesso!");
+        showSuccessToast("Usuário cadastrado com sucesso!");
+        setIsLoading(false); // Esconde a animação de loading
         navigate("/login");
       })
       .catch(error => {
-        if (error.response && error.response.data && error.response.data.message) {
-          alert(error.response.data.message);
+        if (error.response && error.response.status === 409) {
+          showErrorToast("O email informado já está cadastrado. Por favor, escolha outro.");
+        } else if (error.response && error.response.status === 400) {
+          showErrorToast("Erro de validação. Verifique os campos e tente novamente.");
+        } else if (error.response && error.response.status === 500) {
+          showErrorToast("Ocorreu um erro inesperado no servidor. Por favor, tente novamente mais tarde.");
+        } else if (error.response && error.response.data && error.response.data.message) {
+          showErrorToast(error.response.data.message);
         } else {
           console.error("Error signing up: ", error);
-          alert("Ocorreu um erro ao cadastrar o usuário. Por favor, tente novamente.");
+          showErrorToast("Ocorreu um erro ao cadastrar o usuário. Por favor, tente novamente.");
         }
+        setIsLoading(false); // Esconde a animação de loading
       });
-  }
+    showSuccessToast("Usuário cadastrado com sucesso!");
+  };
 
   return (
     <Layout>
+      <Alerts /> 
+      {isLoading && <Loading />}
       <hr />
       <div className="form-popup">
         <div className="form-box">
           <div className="form-content">
             <h2>CADASTRAR</h2>
             <form onSubmit={handleSignup}>
-              <div className="input-field">
-                <input
-                  type="text"
-                  id="signupCodigo"
-                  value={codigo}
-                  onChange={(e) => setCodigo(e.target.value)}
-                  required
-                />
-                <label htmlFor="signupCodigo">Código de autorização</label>
-              </div>
               <div className="input-field">
                 <input
                   type="text"

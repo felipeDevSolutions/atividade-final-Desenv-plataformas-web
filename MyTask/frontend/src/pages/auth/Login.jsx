@@ -5,32 +5,48 @@ import "../auth/login.css";
 import "../auth/form.css"; // Importando o CSS compartilhado
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
+import Loading from '../../components/Loading/Loading';
+import Alerts, { showSuccessToast, showErrorToast } from '../../components/layout/Alerts'; // Importe as funções
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const { dispatch } = useContext(AuthContext);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:5000/api/login', { email, password });
-      
+      const response = await axios.post('http://localhost:5000/api/login', { email, password }); // URL correta
+
       const { token, user } = response.data;
 
-      localStorage.setItem('token', token);
-      dispatch({ type: "LOGIN", payload: user });
+      localStorage.setItem('token', token); // Salva o token no localStorage
+      dispatch({ type: "LOGIN", payload: user }); // Salva o usuário no contexto
+
+      setIsLoading(false);
       navigate("/home");
+      showSuccessToast('Login efetuado com sucesso!');
     } catch (error) {
       console.error("Error logging in: ", error);
-      alert("Credenciais inválidas. Verifique o usuário e senha ou faça seu cadastro.");
+      setIsLoading(false); // Esconde a animação de loading
+
+      // Ajustando mensagens de erro
+      if (error.response && error.response.status === 400) {
+        showErrorToast('Credenciais inválidas. Verifique o usuário e senha.');
+      } else {
+        showErrorToast('Ocorreu um erro ao fazer login. Tente novamente.'); 
+      }
     }
   }
 
   return (
     <Layout>
+      <Alerts /> 
+      {isLoading && <Loading />}
       <div className="form-popup">
         <div className="form-box">
           <div className="form-content">
@@ -61,6 +77,7 @@ const Login = () => {
                 Ainda não criou sua conta?
                 <a href="/signup" id="signup-link"> Criar conta</a>
               </div>
+              <p className="forgot-password">Esqueceu sua senha? <a href="/forgot-password">Redefinir senha</a></p>
             </form>
           </div>
         </div>

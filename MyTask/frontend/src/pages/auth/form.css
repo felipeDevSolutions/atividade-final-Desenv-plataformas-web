@@ -53,11 +53,15 @@ form .input-field {
     position: relative;
 }
 
-img {
-    width: 120px;
+form .input-field-redefinir {
+    height: 45px;
+    width: 100%;
+    position: relative;
 }
 
-form .input-field input {
+
+form .input-field input,
+form .input-field-redefinir input {
     width: 100%;
     height: 100%;
     outline: none;
@@ -70,28 +74,30 @@ form .input-field input {
     color: #2dfafd;
 }
 
-form .input-field label {
+.input-field label {
     position: absolute;
-    top: 50%;
+    top: 12px; /* Posição inicial da label */
     left: 15px;
-    color: #717171;
-    pointer-events: none;
-    transform: translateY(-50%);
-    transition: 0.2s ease;
+    color: #717171; /* Cor da label */
+    pointer-events: none; 
+    transition: 0.2s ease; /* Transição suave */
+    font-size: 1rem; /* Tamanho da fonte da label */
 }
 
 .input-field input:focus {
+    border: 2px solid #2ffbfe;
     border-color: #2ffbfe;
 }
 
 .input-field input:is(:focus, :valid) {
     padding: 16px 15px 0;
     border-color: #2ffbfe;
+    
 }
 
 .input-field input:is(:focus, :valid) ~ label {
-    font-size: 0.75rem;
-    transform: translateY(-120%);
+    font-size: 0.75rem; /* Tamanho da fonte da label em foco */
+    top: 5px; /* Posição da label em foco */
 }
 
 .form-box a {
@@ -139,18 +145,47 @@ form button:hover {
     text-align: center;
     color: #fff;
     font-size: 0.95rem;
-}
-
-.signup .policy-text {
+    margin-top: 1rem;
     display: flex;
+    justify-content: center;
     align-items: center;
-}
-
-.signup .policy-text input {
-    width: 14px;
-    height: 14px;
-    margin-right: 7px;
-}
+  }
+  
+  .form-box .bottom-link a {
+    color: #2ffbfe; /* Cor do link */
+    text-decoration: none;
+    margin-left: 0.5rem; /* Espaçamento entre o texto e o link */
+    font-weight: bold; /* Estilo do link */
+    transition: color 0.2s ease; /* Transição suave da cor */
+  }
+  
+  .form-box .bottom-link a:hover {
+    text-decoration: underline;
+    color: #fff; /* Cor do link ao passar o mouse */
+  }
+  
+  .form-box .forgot-password {
+    text-align: center;
+    color: #fff;
+    font-size: 0.95rem;
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .form-box .forgot-password a {
+    color: #2ffbfe; /* Cor do link */
+    text-decoration: none;
+    margin-left: 0.5rem; /* Espaçamento entre o texto e o link */
+    font-weight: bold; /* Estilo do link */
+    transition: color 0.2s ease; /* Transição suave da cor */
+  }
+  
+  .form-box .forgot-password a:hover {
+    text-decoration: underline;
+    color: #fff; /* Cor do link ao passar o mouse */
+  }
 
 @media (max-width: 960px) {
     

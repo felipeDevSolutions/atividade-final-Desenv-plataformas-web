@@ -12,16 +12,20 @@ function LandingPage() {
     navigate('/signup');
   };
 
+  const handleGoToLandingPage = () => {
+    navigate('/');
+  };
+
   return (
     <div className="container">
       <div className='header'>
         <div className='nav'>
           <div className="nav-bar">
             <div className="bg"></div>
-            <li><a className="nav-link active" href="#home">Home</a></li>
-            <li><a className="nav-link" href="#projects" onClick={handleGoToLogin}>Login</a></li>
-            <li><a className="nav-link" href="#signup" onClick={handleGoToSignup}>Signup</a></li>
-            <li><a className="nav-link" href="#contact">Contato</a></li>
+              <li><a className="nav-link active" href="/" onClick={handleGoToLandingPage}>LandingPage</a></li>
+              <li><a className="nav-link" href="/login" onClick={handleGoToLogin}>Login</a></li>
+              <li><a className="nav-link" href="/signup" onClick={handleGoToSignup}>Signup</a></li>
+              <li><a className="nav-link" href="#contact">Contato</a></li>
           </div>
         </div>
       </div>
