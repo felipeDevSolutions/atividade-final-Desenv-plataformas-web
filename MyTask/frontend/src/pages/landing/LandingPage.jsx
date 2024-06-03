@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../context/AuthContext'; 
 
 function LandingPage() {
   const navigate = useNavigate();
+  const { currentUser, isLoading, error } = useContext(AuthContext); 
 
   const handleGoToLogin = () => {
     navigate('/login');
@@ -22,10 +24,14 @@ function LandingPage() {
         <div className='nav'>
           <div className="nav-bar">
             <div className="bg"></div>
-              <li><a className="nav-link active" href="/" onClick={handleGoToLandingPage}>LandingPage</a></li>
-              <li><a className="nav-link" href="/login" onClick={handleGoToLogin}>Login</a></li>
-              <li><a className="nav-link" href="/signup" onClick={handleGoToSignup}>Signup</a></li>
-              <li><a className="nav-link" href="#contact">Contato</a></li>
+            <li><a className="nav-link active" href="/" onClick={handleGoToLandingPage}>LandingPage</a></li>
+            {/* Exibe o botão Login se o usuário não estiver logado e não estiver carregando */}
+            {!currentUser && !isLoading && <li><a className="nav-link" href="/login" onClick={handleGoToLogin}>Login</a></li>}
+            {/* Exibe o botão Signup se o usuário não estiver logado e não estiver carregando */}
+            {!currentUser && !isLoading && <li><a className="nav-link" href="/signup" onClick={handleGoToSignup}>Signup</a></li>}
+            {/* Exibe o botão Home se o usuário estiver logado e não estiver carregando */}
+            {currentUser && !isLoading && <li><a className="nav-link" href="/" onClick={handleGoToLandingPage}>Home</a></li>}
+            <li><a className="nav-link" href="#contact">Contato</a></li>
           </div>
         </div>
       </div>
@@ -51,6 +57,9 @@ function LandingPage() {
             </div>
           </section>
         </div>
+
+        {/* Exibe a mensagem de erro se houver */}
+        {error && <div className="error-message">{error}</div>} 
       </main>
     </div>
   );

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import Layout from '../../components/layout/Layout';
+import Loading from '../../components/Loading/Loading';
 import { AuthContext } from '../../context/AuthContext';
 import { useNavigate, Navigate } from 'react-router-dom';
 import './AdminPanel.css'; 
@@ -13,6 +14,7 @@ const AdminPanel = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    setIsLoading(true);
     const fetchUsers = async () => {
       try {
         const token = localStorage.getItem('token');
@@ -33,6 +35,7 @@ const AdminPanel = () => {
   }, []); // Execute apenas uma vez ao montar o componente
 
   const handleDeleteUser = async (userId) => {
+    setIsLoading(true);
     try {
       const token = localStorage.getItem('token');
       await axios.delete(`http://localhost:5000/api/users/${userId}`, {
@@ -51,6 +54,7 @@ const AdminPanel = () => {
     } catch (err) {
       setError(err);
     }
+    setIsLoading(false);
   };
 
   // Verifica se o usuário está logado
@@ -60,6 +64,7 @@ const AdminPanel = () => {
 
   return (
     <Layout>
+      {isLoading && <Loading />}
       <div className="form-box-adminpanel"> 
         <div className="form-content-adminpanel"> 
           <h2>Gerenciamento de Usuários</h2>

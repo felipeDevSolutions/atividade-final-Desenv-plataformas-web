@@ -53,6 +53,23 @@ form .input-field {
     position: relative;
 }
 
+form .input-field-terms{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 45px;
+    width: 100%;
+    margin-top: 15px;
+    position: relative;
+    padding: 5px;
+}
+
+form .input-field-terms label{
+    display: flex;
+    gap: 10px;
+    font-size: small;
+}
+
 form .input-field-redefinir {
     height: 45px;
     width: 100%;
@@ -82,6 +99,7 @@ form .input-field-redefinir input {
     pointer-events: none; 
     transition: 0.2s ease; /* Transição suave */
     font-size: 1rem; /* Tamanho da fonte da label */
+    margin-bottom: 5px; /* Adiciona um espaçamento maior para a label dos termos */
 }
 
 .input-field input:focus {
@@ -187,17 +205,22 @@ form button:hover {
     color: #fff; /* Cor do link ao passar o mouse */
   }
 
+.input-field input[type="checkbox"] {
+    /* ... (estilos para o checkbox) */
+    margin-right: 5px; /* Adiciona um espaçamento à direita do checkbox */
+}
+
+.input-field input[type="checkbox"] + label {
+    /* ... (estilos para a label do checkbox) */
+    /* Alinha a label com o checkbox */
+    display: inline-block; /* Define a exibição como bloco inline */
+}
+
 @media (max-width: 960px) {
     
 
     
 
 
-    
-
    
-
-    
-
-    
 }

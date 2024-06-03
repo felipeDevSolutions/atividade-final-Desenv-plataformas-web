@@ -8,7 +8,8 @@ import AdminPanel from './components/Admin/AdminPanel';
 import EditUser from './components/Admin/EditUser';
 import { AuthContext } from './context/AuthContext';
 import ForgotPassword from './pages/auth/ForgotPassword';
-import Loading from './components/Loading/Loading'; 
+import Loading from './components/Loading/Loading';
+import Terms from './pages/utils/terms'; // Importa a página Terms.jsx
 
 const RequireAuth = ({ children }) => {
   const { currentUser } = useContext(AuthContext);
@@ -38,6 +39,7 @@ function App() {
             <Route path="/home" element={<RequireAuth><Home /></RequireAuth>} />
             <Route path="/admin" element={<RequireAuth><AdminPanel /></RequireAuth>} />
             <Route path="/users/:userId/edit" element={<RequireAuth><EditUser /></RequireAuth>} />
+            <Route path="/terms" element={<Terms />} /> 
           </Routes>
         </Router>
       )}
