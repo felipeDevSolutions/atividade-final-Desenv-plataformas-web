@@ -48,7 +48,6 @@ const Signup = () => {
         }
         setIsLoading(false); // Esconde a animação de loading
       });
-    showSuccessToast("Usuário cadastrado com sucesso!");
   };
 
   return (

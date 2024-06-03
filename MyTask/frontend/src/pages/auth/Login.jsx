@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import axios from 'axios';
 import Layout from '../../components/layout/Layout';
 import "../auth/login.css";
-import "../auth/form.css"; // Importando o CSS compartilhado
+import "./form.css";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import Loading from '../../components/Loading/Loading';
@@ -36,7 +36,7 @@ const Login = () => {
 
       // Ajustando mensagens de erro
       if (error.response && error.response.status === 400) {
-        showErrorToast('Credenciais inválidas. Verifique o usuário e senha.');
+        showErrorToast('Credenciais inválidas. Verifique o usuário e senha ou faça seu cadastro');
       } else {
         showErrorToast('Ocorreu um erro ao fazer login. Tente novamente.'); 
       }

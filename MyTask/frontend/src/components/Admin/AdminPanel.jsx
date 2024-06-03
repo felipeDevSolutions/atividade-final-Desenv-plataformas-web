@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
+import { AuthContext } from '../../context/AuthContext';
+import { useNavigate, Navigate } from 'react-router-dom';
 import './AdminPanel.css'; 
-import Loading from '../../components/Loading/Loading';
-import Alerts, { showSuccessToast, showErrorToast } from '../../components/layout/Alerts'; 
 
 const AdminPanel = () => {
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const { currentUser, dispatch } = useContext(AuthContext); // Importe dispatch
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -20,14 +22,15 @@ const AdminPanel = () => {
           },
         });
         setUsers(response.data);
-        setIsLoading(false); 
-      } catch (error) {
-        console.error('Erro ao buscar usuários:', error);
-        showErrorToast('Erro ao carregar usuários!');
+      } catch (err) {
+        setError(err);
+      } finally {
+        setIsLoading(false);
       }
     };
+
     fetchUsers();
-  }, []);
+  }, []); // Execute apenas uma vez ao montar o componente
 
   const handleDeleteUser = async (userId) => {
     try {
@@ -38,27 +41,34 @@ const AdminPanel = () => {
         },
       });
       setUsers(users.filter((user) => user.id !== userId));
-      showSuccessToast('Usuário deletado com sucesso!');
-    } catch (error) {
-      console.error('Erro ao deletar usuário:', error);
-      showErrorToast('Erro ao deletar usuário!');
+
+      // Faz logout APENAS se o usuário excluído for o usuário logado
+      if (userId === currentUser.id) { 
+        dispatch({ type: "LOGOUT" }); 
+        navigate("/login"); 
+      }
+
+    } catch (err) {
+      setError(err);
     }
   };
 
+  // Verifica se o usuário está logado
+  if (!currentUser) {
+    return <Navigate to="/login" />;
+  }
+
   return (
     <Layout>
-      <Alerts /> 
-      {isLoading && <Loading />} 
-      <div className="container">
-        <div className="row">
-          <div className="col-12">
-            <h1>Painel de Administração</h1>
-          </div>
-        </div>
-
-        <div className="row">
-          <div className="col-12">
-            <table className="table table-striped">
+      <div className="form-box-adminpanel"> 
+        <div className="form-content-adminpanel"> 
+          <h2>Gerenciamento de Usuários</h2>
+          {isLoading ? (
+            <p>Carregando...</p>
+          ) : error ? (
+            <p>Erro ao carregar usuários: {error.message}</p>
+          ) : (
+            <table className="user-table">
               <thead>
                 <tr>
                   <th>Email</th>
@@ -70,13 +80,10 @@ const AdminPanel = () => {
                   <tr key={user.id}>
                     <td>{user.email}</td>
                     <td>
-                      <Link to={`/users/${user.id}/edit`} className="btn btn-primary btn-sm mr-2">
+                      <button className="btn btn-edit" onClick={() => navigate(`/users/${user.id}/edit`)}>
                         Editar
-                      </Link>
-                      <button
-                        className="btn btn-danger btn-sm"
-                        onClick={() => handleDeleteUser(user.id)}
-                      >
+                      </button>
+                      <button className="btn btn-delete" onClick={() => handleDeleteUser(user.id)}>
                         Excluir
                       </button>
                     </td>
@@ -84,7 +91,7 @@ const AdminPanel = () => {
                 ))}
               </tbody>
             </table>
-          </div>
+          )}
         </div>
       </div>
     </Layout>

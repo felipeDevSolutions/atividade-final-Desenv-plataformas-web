@@ -4,6 +4,7 @@ import axios from 'axios';
 import Layout from '../../components/layout/Layout';
 import Loading from '../../components/Loading/Loading';
 import Alerts, { showSuccessToast, showErrorToast } from '../../components/layout/Alerts';
+import "../../pages/auth/form.css"; // Importando o CSS do form
 
 function EditUser() {
   const { userId } = useParams();
@@ -50,46 +51,45 @@ function EditUser() {
     <Layout>
       <Alerts />
       {isLoading && <Loading />}
-      <div className="container">
-        <h1>Atualizar Senha</h1>
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="oldPassword">Senha Antiga:</label>
-            <input
-              type="password"
-              className="form-control"
-              id="oldPassword"
-              value={oldPassword}
-              onChange={(e) => setOldPassword(e.target.value)}
-              required
-            />
+      <div className="form-popup"> {/* Classe do formulário */}
+        <div className="form-box">
+          <div className="form-content">
+            <h2>Atualizar Senha</h2>
+            <form onSubmit={handleSubmit} method="post"> {/* Formulário */}
+              <div className="input-field"> {/* Campo para a senha antiga */}
+                <input
+                  type="password"
+                  id="oldPassword"
+                  value={oldPassword}
+                  onChange={(e) => setOldPassword(e.target.value)}
+                  required
+                />
+                <label htmlFor="oldPassword">Senha Antiga</label>
+              </div>
+              <div className="input-field"> {/* Campo para a nova senha */}
+                <input
+                  type="password"
+                  id="newPassword"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  required
+                />
+                <label htmlFor="newPassword">Nova Senha</label>
+              </div>
+              <div className="input-field"> {/* Campo para confirmar a nova senha */}
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                />
+                <label htmlFor="confirmPassword">Confirmar Nova Senha</label>
+              </div>
+              <button type="submit">Atualizar</button> {/* Botão para enviar o formulário */}
+            </form>
           </div>
-          <div className="form-group">
-            <label htmlFor="newPassword">Nova Senha:</label>
-            <input
-              type="password"
-              className="form-control"
-              id="newPassword"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="confirmPassword">Confirmar Nova Senha:</label>
-            <input
-              type="password"
-              className="form-control"
-              id="confirmPassword"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-            />
-          </div>
-          <button type="submit" className="btn btn-primary">
-            Atualizar
-          </button>
-        </form>
+        </div>
       </div>
     </Layout>
   );

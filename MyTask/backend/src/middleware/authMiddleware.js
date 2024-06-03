@@ -1,29 +1,20 @@
-const admin = require('firebase-admin');
-const serviceAccount = require('../../firebase-service-account.json');
+const jwt = require('jsonwebtoken');
 
-if (!admin.apps.length) {
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount)
-  });
-}
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
 
-const authMiddleware = async (req, res, next) => {
-  const token = req.headers.authorization?.split(' ')[1];
-  console.log('Token de autenticação recebido:', token);
-
-  if (!token) {
-    return res.status(401).json({ message: 'Token de autenticação não encontrado' });
+  if (token == null) {
+    return res.status(401).json({ message: 'Token de autenticação ausente' });
   }
 
-  try {
-    const decodedToken = await admin.auth().verifyIdToken(token);
-    req.userId = decodedToken.uid;
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) {
+      return res.status(403).json({ message: 'Token inválido' });
+    }
+    req.user = user; 
     next();
-  } catch (error) {
-    console.log('Erro ao verificar o token:', error.message);
-    return res.status(401).json({ message: 'Token de autenticação inválido' });
-  }
+  });
 };
 
-module.exports = authMiddleware;
-
+module.exports = authenticateToken;

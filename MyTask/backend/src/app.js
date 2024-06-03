@@ -1,36 +1,46 @@
-require('dotenv').config();
 const express = require('express');
-const bodyParser = require('body-parser');
 const cors = require('cors');
-const rateLimit = require('express-rate-limit');
-const userRoutes = require('./routes/userRoutes');
+const dotenv = require('dotenv');
+const { db, auth } = require('../firebaseConfig');
+const jwt = require('jsonwebtoken');
+const bcryptjs = require('bcryptjs');
+const userRouter = require('./routes/userRoutes');
+const authRouter = require('./routes/authRoutes');
+
+dotenv.config();
 
 const app = express();
+const port = process.env.PORT;
 
-const corsOptions = {
-  origin: [
-    'http://localhost:3000', // URL do seu frontend local
-    'https://app-fiz.firebaseapp.com' // URL do seu aplicativo web no Firebase
-  ],
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Permite todos os métodos
-  allowedHeaders: 'Content-Type,Authorization', // Permite cabeçalhos importantes
-  credentials: true // Permite cookies e credenciais
+// Middleware para habilitar CORS
+app.use(cors());
+app.use(express.json());
+
+// Middleware para verificar o token JWT
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (token == null) {
+    return res.status(401).json({ message: 'Token de autenticação ausente' });
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) {
+      return res.status(403).json({ message: 'Token inválido' });
+    }
+    req.user = user;
+    next();
+  });
 };
 
-app.use(cors(corsOptions));
-app.use(bodyParser.json());
+// Rotas
+app.use('/api/users', authenticateToken, userRouter);
+app.use('/api', authRouter);
 
-const apiLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutos
-  max: 100, // limita cada IP a 100 requisições por `window` (aqui, por 15 minutos)
-  message: 'Muitas requisições criadas a partir deste IP, por favor tente novamente após 15 minutos'
+// Iniciar o servidor
+app.listen(port, () => {
+  console.log(`Servidor rodando em http://localhost:${port}`);
 });
 
-app.use('/api/', apiLimiter);
-
-app.use('/api', userRoutes);
-
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+module.exports = app;

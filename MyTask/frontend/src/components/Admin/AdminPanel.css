@@ -4,82 +4,110 @@
     padding: 0;
     box-sizing: border-box;
     font-family: Arial, Helvetica, sans-serif;
-}
-
-body {
+  }
+  
+  body {
     width: 100%;
     height: 100vh;
-}
-
-.form-popup {
+    background-color: #1e2737; /* Fundo escuro */
+    color: #2ffbfe; /* Texto em azul claro */
+  }
+  
+  .form-box-adminpanel {
     display: flex;
+    flex-direction: column; /* Organize os elementos verticalmente */
     justify-content: center;
     position: fixed;
-    top: 53%;
-    left: 50%;
-    max-width: 720px;
-    background-color: transparent;
+    top: 50%;
+    width: 70%;
+    background-color: #1e2737; /* Fundo escuro */
     border: 2px solid #2ffbfe;
     transform: translate(-50%, -50%);
     border-radius: 8px;
     box-shadow: 5px 5px 80px #006395;
     opacity: 100;
-}
-
-.form-popup .form-box {
+  }
+  
+  .form-content-adminpanel {
     display: flex;
-}
-
-.form-box h2 {
-    justify-content: baseline;
-    text-align: center;
-    margin-top: 5px;
-    color: #fff;
-}
-
-.form-box .form-content {
-    display: flex;
-    flex-direction: column;
+    flex-direction: column; /* Organize os elementos verticalmente */
     width: 100%;
     padding: 10px 20px;
     align-items: center;
-}
-
-/* Estilos adicionais para a tabela de gerenciamento de usuários */
-.user-table {
+    flex-wrap: wrap;
+  }
+  
+  /* Estilos adicionais para a tabela de gerenciamento de usuários */
+  .user-table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
-    background-color: #1e27378c;
-    color: #2dfafd;
-}
-
-.user-table th, .user-table td {
+    background-color: #1e2737;
+    color: #2ffbfe;
+    border-radius: 8px; /* Arredonda as bordas da tabela */
+    overflow-x: auto; /* Habilita scroll horizontal se necessário */
+  }
+  
+  .user-table th, .user-table td {
     padding: 10px;
     text-align: left;
     border-bottom: 1px solid #2ffbfe;
-}
-
-.user-table th {
-    background-color: #1e27378c;
+  }
+  
+  .user-table th {
+    background-color: #1e2737;
     color: #2ffbfe;
-}
-
-.user-table tr:hover {
-    background-color: #1f293e;
-}
-
-.user-table button {
+    font-weight: bold;
+  }
+  
+  .user-table tr:hover {
+    background-color: #23304d;
+  }
+  
+  .user-table button {
     padding: 5px 10px;
     margin: 0 5px;
     border: none;
-    border-radius: 3px;
-    background-color: #1f9398;
+    border-radius: 5px;
+    background-color: #1f9398; /* Azul padrão */
     color: #fff;
     cursor: pointer;
-    transition: 0.2s ease;
-}
-
-.user-table button:hover {
-    background-color: #26b7be;
-}
+    transition: background-color 0.2s ease; /* Transição suave */
+    display: inline-block; /* Faz com que os botões fiquem lado a lado */
+    font-size: 14px; /* Ajuste o tamanho da fonte */
+  }
+  
+  .user-table .btn-edit {
+    background-color: #1f9398; /* Azul padrão */
+  }
+  
+  .user-table .btn-edit:hover {
+    background-color: #26b7be; /* Azul mais escuro */
+    color: #fff;
+  }
+  
+  .user-table .btn-delete {
+    background-color: #8d1515; /* Vermelho */
+  }
+  
+  .user-table .btn-delete:hover {
+    background-color: #b31a1a; /* Vermelho mais escuro */
+    color: #fff;
+  }
+  
+  /* Responsividade - Tela Mobile */
+  @media (max-width: 600px) {
+    .form-box-adminpanel {
+      width: 90%; /* Ajuste a largura para telas menores */
+    }
+  
+    .user-table th, .user-table td {
+      font-size: 14px; /* Ajuste o tamanho da fonte */
+      padding: 8px; /* Reduz o padding para melhor visualização */
+    }
+  
+    .user-table button {
+      padding: 6px 8px; /* Ajuste o padding dos botões */
+      font-size: 12px; /* Ajuste o tamanho da fonte */
+    }
+  }

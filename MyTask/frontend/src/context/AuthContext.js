@@ -17,7 +17,7 @@ export const AuthContextProvider = ({ children }) => {
 
     const validateToken = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/auth/validate', { // URL correta
+        const response = await fetch('http://localhost:5000/api/validate', { // URL correta
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`,
