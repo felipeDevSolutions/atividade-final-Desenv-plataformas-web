@@ -8,12 +8,13 @@ function Home() {
   const { currentUser, isLoading, error } = useContext(AuthContext); 
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState('');
+  const [showCompleted, setShowCompleted] = useState(false);
 
   useEffect(() => {
     const fetchTasks = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:5000/api/tasks', { // URL correta
+        const response = await fetch('http://localhost:5000/api/tasks', { 
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -32,33 +33,31 @@ function Home() {
     setNewTask(event.target.value);
   };
 
-  const handleAddTask = async () => {
-    if (newTask.trim() === '') {
-      alert('Por favor, insira uma tarefa!');
-      return;
-    }
-
-    try {
-      const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/tasks', {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ task: newTask }),
-      });
-      if (response.ok) {
-        const newTaskData = await response.json();
-        setTasks([...tasks, newTaskData]);
-        setNewTask('');
-        showSuccessToast('Tarefa adicionada!');
-      } else {
+  const handleAddTask = async (event) => {
+    if (event.key === 'Enter' && newTask.trim() !== '') {
+      event.preventDefault(); 
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch('http://localhost:5000/api/tasks', {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ task: newTask }),
+        });
+        if (response.ok) {
+          const newTaskData = await response.json();
+          setTasks([...tasks, newTaskData]);
+          setNewTask('');
+          showSuccessToast('Tarefa adicionada!');
+        } else {
+          showErrorToast('Erro ao adicionar tarefa!');
+        }
+      } catch (err) {
+        console.error('Erro ao adicionar tarefa:', err);
         showErrorToast('Erro ao adicionar tarefa!');
       }
-    } catch (err) {
-      console.error('Erro ao adicionar tarefa:', err);
-      showErrorToast('Erro ao adicionar tarefa!');
     }
   };
 
@@ -83,15 +82,41 @@ function Home() {
     }
   };
 
+  const handleToggleTaskComplete = async (taskId) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`http://localhost:5000/api/tasks/${taskId}/complete`, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.ok) {
+        const updatedTasks = tasks.map((task) =>
+          task.id === taskId ? { ...task, completed: !task.completed } : task
+        );
+        setTasks(updatedTasks);
+        showSuccessToast('Tarefa atualizada!');
+      } else {
+        showErrorToast('Erro ao atualizar tarefa!');
+      }
+    } catch (err) {
+      console.error('Erro ao atualizar tarefa:', err);
+      showErrorToast('Erro ao atualizar tarefa!');
+    }
+  };
+
+  const handleShowCompleted = () => {
+    setShowCompleted(!showCompleted);
+  };
 
   return (
     <Layout>
-      <Alerts /> {/* Renderiza o componente Alerts */}
+      <Alerts /> 
       <div className="container">
         <div className="row">
           <div className="col-12">
             <h1>Gerenciador de Tarefas</h1>
-            {/* Exibindo informações do usuário */}
             {currentUser && <p>Bem-vindo, {currentUser.email}!</p>} 
           </div>
         </div>
@@ -104,6 +129,7 @@ function Home() {
                 placeholder="Adicionar nova tarefa"
                 value={newTask}
                 onChange={handleNewTaskChange}
+                onKeyDown={handleAddTask} 
               />
               <button className="btn btn-primary" onClick={handleAddTask}>
                 Adicionar
@@ -111,6 +137,10 @@ function Home() {
             </div>
           </div>
         </div>
+
+        <button className="btn btn-secondary" onClick={handleShowCompleted}>
+          {showCompleted ? 'Mostrar Pendentes' : 'Mostrar Concluídas'}
+        </button>
 
         <div className="row">
           <div className="col-12">
@@ -120,17 +150,27 @@ function Home() {
               <p>Erro ao carregar tarefas: {error.message}</p>
             ) : (
               <ul className="list-group">
-                {tasks.map((task) => (
-                  <li key={task.id} className="list-group-item d-flex justify-content-between align-items-center">
-                    {task.task}
-                    <button
-                      className="btn btn-danger btn-sm"
-                      onClick={() => handleDeleteTask(task.id)}
-                    >
-                      Excluir
-                    </button>
-                  </li>
-                ))}
+                {tasks
+                  .filter((task) => (showCompleted ? task.completed : !task.completed)) 
+                  .map((task) => (
+                    <li key={task.id} className="list-group-item d-flex justify-content-between align-items-center">
+                      {task.task} 
+                      <div> 
+                        <button
+                          className="btn btn-success btn-sm mr-2" 
+                          onClick={() => handleToggleTaskComplete(task.id)}
+                        >
+                          Fiz
+                        </button>
+                        <button
+                          className="btn btn-danger btn-sm"
+                          onClick={() => handleDeleteTask(task.id)}
+                        >
+                          Excluir
+                        </button>
+                      </div>
+                    </li>
+                  ))}
               </ul>
             )}
           </div>
