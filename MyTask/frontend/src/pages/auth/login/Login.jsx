@@ -1,12 +1,12 @@
 import React, { useContext, useState } from "react";
 import axios from 'axios';
-import Layout from '../../components/layout/Layout';
-import "../auth/login.css";
-import "./form.css";
+import Layout from '../../../components/layout/Layout';
+import "../login/login.css";
+import "../form.css";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../../context/AuthContext";
-import Loading from '../../components/Loading/Loading';
-import Alerts, { showSuccessToast, showErrorToast } from '../../components/layout/Alerts'; // Importe as funções
+import { AuthContext } from "../../../context/AuthContext";
+import Loading from '../../../components/Loading/Loading';
+import Alerts, { showSuccessToast, showErrorToast } from '../../../components/layout/Alerts'; // Importe as funções
 
 const Login = () => {
   const [email, setEmail] = useState("");

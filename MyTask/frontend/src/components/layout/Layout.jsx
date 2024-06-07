@@ -35,8 +35,6 @@ const Layout = ({ children }) => {
               </>
             )}
 
-            <li><a className="nav-link" href="#contact">Contato</a></li>
-
             {currentUser && (
               <li className="nav-item-right">
                 <button className="nav-link logout-button" onClick={handleLogout}>Logout</button>

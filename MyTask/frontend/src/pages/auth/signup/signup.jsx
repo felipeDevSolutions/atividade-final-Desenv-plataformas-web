@@ -1,11 +1,11 @@
 import { useState } from "react";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
-import Layout from '../../components/layout/Layout';
-import "../auth/signup.css";
-import "../auth/form.css";
-import Loading from '../../components/Loading/Loading';
-import Alerts, { showSuccessToast, showErrorToast } from '../../components/layout/Alerts';
+import Layout from '../../../components/layout/Layout';
+import "../signup/signup";
+import "../form.css";
+import Loading from '../../../components/Loading/Loading';
+import Alerts, { showSuccessToast, showErrorToast } from '../../../components/layout/Alerts';
 
 const Signup = () => {
   const navigate = useNavigate();

@@ -1,8 +1,9 @@
 .form-content{
     display: flex;
     justify-content: center;
-    padding: 50px;
+    padding: 70px 0px ;
     z-index: 10;
+    width: 100%;
 }
 
 .terms-container {
@@ -44,3 +45,15 @@
   .terms-container a:hover {
     text-decoration: underline;
   }
+
+@media (max-width: 960px) {
+  
+  .terms-container{
+    display: flex;
+    width: 100%;
+  }
+  
+
+
+  
+}

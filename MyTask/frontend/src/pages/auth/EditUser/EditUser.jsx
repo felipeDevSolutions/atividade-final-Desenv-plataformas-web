@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Layout from '../../components/layout/Layout';
-import Loading from '../../components/Loading/Loading';
-import Alerts, { showSuccessToast, showErrorToast } from '../../components/layout/Alerts';
-import "../../pages/auth/form.css"; // Importando o CSS do form
+import Layout from '../../../components/layout/Layout';
+import Loading from '../../../components/Loading/Loading';
+import Alerts, { showSuccessToast, showErrorToast } from '../../../components/layout/Alerts';
+import "../form.css";
 
 function EditUser() {
   const { userId } = useParams();
@@ -37,7 +37,10 @@ function EditUser() {
         },
       });
 
+      
+
       showSuccessToast('Senha atualizada com sucesso!');
+      console.log("Senha atualizada com sucesso!")
       navigate('/home');
     } catch (error) {
       console.error('Erro ao atualizar senha:', error);

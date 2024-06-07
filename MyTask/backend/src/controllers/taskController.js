@@ -44,7 +44,7 @@ const taskController = {
       // Obtenha o status atual da tarefa
       const currentTask = await taskRef.get();
 
-      // Verifique se a tarefa existe
+      // Verifica se a tarefa existe
       if (currentTask.exists) {
         const currentCompleted = currentTask.data().completed; // Obter o valor atual de completed
 

@@ -29,3 +29,7 @@
   .toast-progress {
     background-color: #4CAF50; /* Verde para a barra de progresso */
   }
+
+  .Toastify__toast-container { /* Target the toast container */
+    top: 30px; /* Set the bottom position */
+  }

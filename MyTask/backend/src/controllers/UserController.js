@@ -8,7 +8,7 @@ class UserController {
     const { email, password } = req.body;
 
     try {
-      // Verificar se o email já existe
+      // Verifica se o email já existe
       const userExists = await db.collection('users').where('email', '==', email).get();
       if (!userExists.empty) {
         return res.status(409).json({ message: 'Email já cadastrado' });
@@ -55,8 +55,8 @@ class UserController {
         return res.status(400).json({ message: 'Credenciais inválidas' });
       }
   
-      // Criar token JWT
-      const token = jwt.sign({ id: userId, email: user.email, uid: user.uid }, process.env.JWT_SECRET); 
+      // Cria token JWT (definindo um tempo de expiração - exemplo: 1 hora)
+      const token = jwt.sign({ id: userId, email: user.email, uid: user.uid }, process.env.JWT_SECRET, { expiresIn: '1h' });
   
       res.status(200).json({ token, user });
   

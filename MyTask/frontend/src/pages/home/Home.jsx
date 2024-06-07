@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
 import Layout from '../../components/layout/Layout';
-import { AuthContext } from '../../context/AuthContext'; 
-import './Home.css'; 
+import { AuthContext } from '../../context/AuthContext';
+import './Home.css';
 import Alerts, { showSuccessToast, showErrorToast } from '../../components/layout/Alerts';
 
 function Home() {
-  const { currentUser, isLoading, error } = useContext(AuthContext); 
+  const { currentUser, isLoading, error } = useContext(AuthContext);
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState('');
   const [showCompleted, setShowCompleted] = useState(false);
@@ -14,7 +14,7 @@ function Home() {
     const fetchTasks = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:5000/api/tasks', { 
+        const response = await fetch('http://localhost:5000/api/tasks', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -34,8 +34,8 @@ function Home() {
   };
 
   const handleAddTask = async (event) => {
-    if (event.key === 'Enter' && newTask.trim() !== '') {
-      event.preventDefault(); 
+    event.preventDefault();
+    if (newTask.trim() !== '') {
       try {
         const token = localStorage.getItem('token');
         const response = await fetch('http://localhost:5000/api/tasks', {
@@ -96,7 +96,7 @@ function Home() {
           task.id === taskId ? { ...task, completed: !task.completed } : task
         );
         setTasks(updatedTasks);
-        showSuccessToast('Tarefa atualizada!');
+        showSuccessToast('Tarefa concluída!');
       } else {
         showErrorToast('Erro ao atualizar tarefa!');
       }
@@ -112,37 +112,39 @@ function Home() {
 
   return (
     <Layout>
-      <Alerts /> 
-      <div className="container">
-        <div className="row">
-          <div className="col-12">
+      <Alerts />
+      <div className="home-container">
+        <div className="task-header">
+          <div className="welcome-title">
             <h1>Gerenciador de Tarefas</h1>
-            {currentUser && <p>Bem-vindo, {currentUser.email}!</p>} 
+            {currentUser && <p>Bem-vindo, {currentUser.email}!</p>}
           </div>
-        </div>
-        <div className="row">
-          <div className="col-12">
-            <div className="input-group mb-3">
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Adicionar nova tarefa"
-                value={newTask}
-                onChange={handleNewTaskChange}
-                onKeyDown={handleAddTask} 
-              />
-              <button className="btn btn-primary" onClick={handleAddTask}>
+          <div className="add-task-input">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Adicionar nova tarefa"
+              value={newTask}
+              onChange={handleNewTaskChange}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' && newTask.trim() !== '') {
+                  event.preventDefault();
+                  handleAddTask(event);
+                }
+              }}
+            />
+            <div className='btn-group-header'>
+              <button className="btn btn-primary add-task-button" onClick={handleAddTask}>
                 Adicionar
+              </button>
+              <button className={`toggle-completed-button btn ${showCompleted ? 'btn-orange' : 'btn-green'}`} onClick={handleShowCompleted}>
+                {showCompleted ? 'Mostrar Pendentes' : 'Mostrar Concluídas'}
               </button>
             </div>
           </div>
         </div>
 
-        <button className="btn btn-secondary" onClick={handleShowCompleted}>
-          {showCompleted ? 'Mostrar Pendentes' : 'Mostrar Concluídas'}
-        </button>
-
-        <div className="row">
+        <div className="task-list">
           <div className="col-12">
             {isLoading ? (
               <p>Carregando tarefas...</p>
@@ -151,19 +153,19 @@ function Home() {
             ) : (
               <ul className="list-group">
                 {tasks
-                  .filter((task) => (showCompleted ? task.completed : !task.completed)) 
+                  .filter((task) => (showCompleted ? task.completed : !task.completed))
                   .map((task) => (
-                    <li key={task.id} className="list-group-item d-flex justify-content-between align-items-center">
-                      {task.task} 
-                      <div> 
+                    <li key={task.id} className="list-group-item task-item d-flex justify-content-between align-items-center">
+                      {task.task}
+                      <div>
                         <button
-                          className="btn btn-success btn-sm mr-2" 
+                          className="btn btn-success btn-sm mr-2 task-done-button"
                           onClick={() => handleToggleTaskComplete(task.id)}
                         >
                           Fiz
                         </button>
                         <button
-                          className="btn btn-danger btn-sm"
+                          className="btn btn-danger btn-sm task-delete-button"
                           onClick={() => handleDeleteTask(task.id)}
                         >
                           Excluir

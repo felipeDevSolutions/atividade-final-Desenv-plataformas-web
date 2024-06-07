@@ -1,15 +1,16 @@
 import React, { useContext } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import LandingPage from './pages/landing/LandingPage';
-import Login from './pages/auth/Login';
-import Signup from './pages/auth/signup';
+import Login from './pages/auth/login/Login';
+import Signup from './pages/auth/signup/signup';
 import Home from './pages/home/Home'; 
-import AdminPanel from './components/Admin/AdminPanel';
-import EditUser from './components/Admin/EditUser';
+import AdminPanel from './pages/Admin/AdminPanel';
+import EditUser from './pages/auth/EditUser/EditUser';
 import { AuthContext } from './context/AuthContext';
-import ForgotPassword from './pages/auth/ForgotPassword';
+import ForgotPassword from './pages/auth/resetPassword/ForgotPassword';
+import ResetPassword from './pages/auth/resetPassword/resetPassword';
 import Loading from './components/Loading/Loading';
-import Terms from './pages/utils/terms'; // Importa a página Terms.jsx
+import Terms from './pages/utils/terms'; 
 
 const RequireAuth = ({ children }) => {
   const { currentUser } = useContext(AuthContext);
@@ -39,7 +40,8 @@ function App() {
             <Route path="/home" element={<RequireAuth><Home /></RequireAuth>} />
             <Route path="/admin" element={<RequireAuth><AdminPanel /></RequireAuth>} />
             <Route path="/users/:userId/edit" element={<RequireAuth><EditUser /></RequireAuth>} />
-            <Route path="/terms" element={<Terms />} /> 
+            <Route path="/reset-password/:oobCode" element={<ResetPassword />} />
+            <Route path="/terms" element={<Terms />} />
           </Routes>
         </Router>
       )}

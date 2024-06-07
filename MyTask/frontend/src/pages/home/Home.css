@@ -1,0 +1,291 @@
+.home-container { /* Principal container da página Home */
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 90vw;
+  height: 90vh;
+  overflow-y: hidden; 
+  color: #2ffbfe; /* Cor do texto azul claro */
+  border-radius: 8px; /* Arredondamento das bordas */
+  padding: 10px;
+  margin-top: 0px; /* Adjust this based on your Layout header height */
+  padding-top: 40px; /* Adjust this based on the height of your task header */
+  padding-bottom: 0px;
+}
+
+
+.task-header { /* Cabeçalho da seção de tarefas */
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 5px;
+  top: 70px; /* Adjust this value to match the height of your Layout header */
+  width: 100%;
+  z-index: 10; /* Ensure it stays on top of other elements */
+  padding: 0px ;
+}
+
+
+.btn-group-header{
+  display: flex;
+  justify-content: center; /* Centraliza os botões horizontalmente */
+}
+
+
+.welcome-title { /* Título de boas-vindas */
+  text-align: center;
+  margin-bottom: 10px;
+  white-space: nowrap;;
+}
+
+
+.welcome-title p{
+  color: #fff;
+}
+
+.add-task-input { /* Input para adicionar tarefas */
+  display: flex;
+  align-items: center;
+  width: 100%;
+  
+}
+
+.add-task-input .form-control {
+  background-color: #232a38bb; /* Cor de fundo do input */
+  color: #f2f2f2; /* Cor do texto do input */
+  border: 2px solid #2ffbfe; /* Borda do input */
+  border-radius: 3px; /* Arredondamento das bordas do input */
+  flex: 1;
+}
+
+.add-task-input .form-control::placeholder {
+  color: #6e778abb; /* Cor da placeholder desejada */
+}
+
+.add-task-button { /* Botão "Adicionar" */
+  background-color: #1f9398; /* Cor do botão */
+  color: #fff; /* Cor do texto do botão */
+  border: none; /* Sem borda no botão */
+  border-radius: 3px; /* Arredondamento das bordas do botão */
+  transition: background-color 0.2s ease; /* Transição suave da cor */
+  margin-left: 10px; /* Espaçamento entre o input e o botão */
+}
+
+.add-task-button:hover {
+  background-color: #26b7be; /* Cor do botão ao passar o mouse */
+}
+
+.toggle-completed-button { /* Botão para alternar entre tarefas concluídas e pendentes */
+  background-color: #1f9398; /* Cor do botão */
+  color: #fff; /* Cor do texto do botão */
+  border: none; /* Sem borda no botão */
+  border-radius: 3px; /* Arredondamento das bordas do botão */
+  transition: background-color 0.2s ease; /* Transição suave da cor */
+  margin-left: 10px; /* Espaçamento entre o input e o botão */
+  white-space: nowrap;
+}
+
+.toggle-completed-button:hover {
+  background-color: #26b7be; /* Cor do botão ao passar o mouse */
+}
+
+.task-list { /* Lista de tarefas */
+  position: sticky; /* Corrigido para 'block' */
+  margin-top: 20px;
+  height: calc(100vh - 40%); /* Ajusta a altura da lista de tarefas para caber no restante da tela */
+  padding-top: 0px; /* Espaçamento para o cabeçalho fixo */
+  overflow-y: auto;
+}
+
+.col-12{
+  overflow-y: auto;
+}
+
+.list-group{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.task-item { /* Item da lista de tarefas */
+  background-color: #1e2737; /* Cor de fundo dos itens da lista */
+  color: #2ffbfe; /* Cor do texto dos itens da lista */
+  border: none; /* Sem borda nos itens da lista */
+  border-radius: 3px; /* Arredondamento das bordas dos itens da lista */
+  height: 50px;
+}
+
+.task-done-button { /* Botão "Fiz" */
+  background-color: #4CAF50; /* Verde */
+}
+
+.task-done-button:hover {
+  background-color: #45a049; /* Verde mais escuro */
+}
+
+.task-delete-button { /* Botão "Excluir" */
+  background-color: #f44336; /* Vermelho */
+}
+
+.task-delete-button:hover {
+  background-color: #d32f2f; /* Vermelho mais escuro */
+}
+
+.task-list ul{
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 0;
+}
+
+.task-list li {
+  background-color: #141c29ce; /* Cor de fundo dos itens da lista */
+  color: #2ffbfe; /* Cor do texto dos itens da lista */
+  border: none; /* Sem borda nos itens da lista */
+  border-radius: 3px; /* Arredondamento das bordas dos itens da lista */
+  padding: 10px;
+}
+
+.task-list li:hover{
+  background-color: #1b2434ce;
+}
+
+.task-list button{
+  padding: 5px 15px;
+  margin: 0 5px;
+  font-size: 1rem;
+}
+
+.task-list li div {
+  display: flex;
+  gap: 10px;
+}
+
+.task-list li button {
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.task-list li button:hover{
+  opacity: .7;
+}
+/* Estilo moderno para a barra de rolagem */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #111822; /* Cor de fundo da barra de rolagem */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888; /* Cor do botão da barra de rolagem */
+  border-radius: 10px; /* Arredonda as bordas do botão */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Cor do botão ao passar o mouse */
+}
+
+.task-list button{
+  display: inline-block; /* Impedir que os botões ocupem a linha inteira */
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  padding: 5px 15px;
+  margin: 0 5px; /* Adicionar margem para espaçamento */
+}
+
+.task-list button:hover {
+  opacity: 0.7; /* Diminuir a opacidade ao passar o mouse */
+}
+
+.toggle-completed-button{
+  background-color: #ff8c00;
+  color: #000;
+}
+
+.toggle-completed-button:hover{
+  background-color: #ffa000;
+}
+
+.btn-orange { /* Style for the "Mostrar Pendentes" button */
+  background-color: #ff8c00; /* Orange */
+  color: #000; /* Black text */
+}
+
+.btn-orange:hover {
+  background-color: #ffa000; /* Darker orange */
+}
+
+.btn-green { /* Style for the "Mostrar Concluídas" button */
+  background-color: #4CAF50; /* Green */
+  color: #fff; /* White text */
+}
+
+.btn-green:hover {
+  background-color: #45a049; /* Darker green */
+}
+
+@media (max-width: 968px) {
+  .home-container { /* Principal container da página Home */
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    width: 90vw;
+    height: 90vh;
+    overflow-y: hidden; 
+    color: #2ffbfe; /* Cor do texto azul claro */
+    border-radius: 8px; /* Arredondamento das bordas */
+    padding: 10px;
+    padding-top: 0px; /* Adjust this based on the height of your task header */
+    padding-bottom: 0px;
+  }
+
+  .task-header {
+    margin: 0;
+    padding: 20 px; /* Reduz o padding para telas menores */
+    width: 100%; /* Ocupa toda a largura da tela */
+    text-align: center; /* Centraliza o texto */
+
+  }
+
+  .btn-group-header{
+    display: flex;
+    width: 100%; /* Ocupa toda a largura da tela */
+    justify-content: center; /* Centraliza os botões horizontalmente */
+    margin-top: 10px;
+  }
+
+  .add-task-input {
+    padding: 0;
+    width: 100%;
+    flex-direction: column; /* Empilha o input e o botão verticalmente */
+    align-items: center; /* Centraliza o input e o botão */
+    margin-bottom: 10px;
+  }
+
+  
+
+  .task-list {
+    padding: 0;
+    width: 100%; /* Ocupa toda a largura da tela */
+    height: calc(100vh - 200px); /* Ajusta a altura da lista */
+  }
+
+  .task-item {
+    flex-direction: column; /* Empilha o texto e os botões verticalmente */
+    align-items: center; /* Centraliza o texto e os botões */
+    height: 130px;
+  }
+
+
+
+  .task-item div {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Centraliza os botões */
+    margin-top: 10px;
+  }
+}

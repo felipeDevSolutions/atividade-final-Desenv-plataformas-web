@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import Layout from '../../components/layout/Layout';
-import '../auth/form.css';
-import Loading from '../../components/Loading/Loading';
-import Alerts, { showSuccessToast, showErrorToast } from '../../components/layout/Alerts';
+import Layout from '../../../components/layout/Layout';
+import "../form.css";
+import Loading from '../../../components/Loading/Loading';
+import Alerts, { showSuccessToast, showErrorToast } from '../../../components/layout/Alerts';
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
@@ -48,7 +48,7 @@ const ForgotPassword = () => {
               </div>
               <button type="submit">Enviar Email</button>
               <p className="forgot-password-message">
-                Um email com instruções para redefinir sua senha será enviado para o endereço informado.
+                Um email com instruções para redefinir sua senha <br/> será enviado para o endereço informado.
               </p>
             </form>
           </div>

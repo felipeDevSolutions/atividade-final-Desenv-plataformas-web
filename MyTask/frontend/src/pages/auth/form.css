@@ -191,6 +191,16 @@ form button:hover {
     justify-content: center;
     align-items: center;
   }
+
+  .form-box .forgot-password-message {
+    text-align: center;
+    color: #fff;
+    font-size: 0.95rem;
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
   
   .form-box .forgot-password a {
     color: #2ffbfe; /* Cor do link */
@@ -218,7 +228,21 @@ form button:hover {
 
 @media (max-width: 960px) {
     
-
+    .form-popup {
+        display: flex; /* Altere a exibição para flex */
+        justify-content: center;
+        position: fixed;
+        width: 95%;
+        top: 53%;
+        left: 50%;
+        max-width: 720px;
+        background-color: transparent;
+        border: 2px solid #2ffbfe;
+        transform: translate(-50%, -50%);
+        border-radius: 8px;
+        box-shadow: 5px 5px 80px #006395;
+        opacity: 100;
+    }
     
 
 

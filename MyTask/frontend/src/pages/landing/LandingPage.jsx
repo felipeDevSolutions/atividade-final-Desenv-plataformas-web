@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext'; 
+import './LandingPage.css'
 
 function LandingPage() {
   const navigate = useNavigate();
@@ -20,18 +21,17 @@ function LandingPage() {
 
   return (
     <div className="container">
-      <div className='header'>
-        <div className='nav'>
-          <div className="nav-bar">
+      <div className='header-landing'>
+        <div className='nav-landing'>
+          <div className="nav-bar-landing">
             <div className="bg"></div>
-            <li><a className="nav-link active" href="/" onClick={handleGoToLandingPage}>LandingPage</a></li>
+            <li><a className="nav-link-landing active-landing" href="/" onClick={handleGoToLandingPage}>LandingPage</a></li>
             {/* Exibe o botão Login se o usuário não estiver logado e não estiver carregando */}
-            {!currentUser && !isLoading && <li><a className="nav-link" href="/login" onClick={handleGoToLogin}>Login</a></li>}
+            {!currentUser && !isLoading && <li><a className="nav-link-landing" href="/login" onClick={handleGoToLogin}>Login</a></li>}
             {/* Exibe o botão Signup se o usuário não estiver logado e não estiver carregando */}
-            {!currentUser && !isLoading && <li><a className="nav-link" href="/signup" onClick={handleGoToSignup}>Signup</a></li>}
+            {!currentUser && !isLoading && <li><a className="nav-link-landing" href="/signup" onClick={handleGoToSignup}>Signup</a></li>}
             {/* Exibe o botão Home se o usuário estiver logado e não estiver carregando */}
-            {currentUser && !isLoading && <li><a className="nav-link" href="/" onClick={handleGoToLandingPage}>Home</a></li>}
-            <li><a className="nav-link" href="#contact">Contato</a></li>
+            {currentUser && !isLoading && <li><a className="nav-link-landing" href="/" onClick={handleGoToLandingPage}>Home</a></li>}
           </div>
         </div>
       </div>

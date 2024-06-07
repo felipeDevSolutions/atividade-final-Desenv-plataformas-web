@@ -6,8 +6,7 @@ import './toasts.css';
 const Alerts = () => {
   return (
     <ToastContainer
-      position="bottom-right"
-      autoClose={5000}
+      autoClose={1000}
       hideProgressBar={false}
       closeOnClick
       pauseOnHover
@@ -19,8 +18,7 @@ const Alerts = () => {
 
 export const showSuccessToast = (message) => {
   toast.success(message, {
-    position: "bottom-right",
-    autoClose: 5000,
+    autoClose: 1000,
     hideProgressBar: false,
     closeOnClick: true,
     pauseOnHover: true,
@@ -33,8 +31,7 @@ export const showSuccessToast = (message) => {
 
 export const showErrorToast = (message) => {
   toast.error(message, {
-    position: "bottom-right",
-    autoClose: 5000,
+    autoClose: 1000,
     hideProgressBar: false,
     closeOnClick: true,
     pauseOnHover: true,

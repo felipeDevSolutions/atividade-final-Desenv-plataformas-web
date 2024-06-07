@@ -4,13 +4,14 @@ import Layout from '../../components/layout/Layout';
 import Loading from '../../components/Loading/Loading';
 import { AuthContext } from '../../context/AuthContext';
 import { useNavigate, Navigate } from 'react-router-dom';
-import './AdminPanel.css'; 
+import '../Admin/AdminPanel.css'; 
+import Alerts, { showSuccessToast, showErrorToast } from '../../components/layout/Alerts';
 
 const AdminPanel = () => {
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { currentUser, dispatch } = useContext(AuthContext); // Importe dispatch
+  const { currentUser, dispatch } = useContext(AuthContext); 
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -32,7 +33,7 @@ const AdminPanel = () => {
     };
 
     fetchUsers();
-  }, []); // Execute apenas uma vez ao montar o componente
+  }, []);
 
   const handleDeleteUser = async (userId) => {
     setIsLoading(true);
@@ -45,6 +46,8 @@ const AdminPanel = () => {
       });
       setUsers(users.filter((user) => user.id !== userId));
 
+      showSuccessToast('Usuário excluído!');
+
       // Faz logout APENAS se o usuário excluído for o usuário logado
       if (userId === currentUser.id) { 
         dispatch({ type: "LOGOUT" }); 
@@ -52,6 +55,7 @@ const AdminPanel = () => {
       }
 
     } catch (err) {
+      showErrorToast('Erro ao excluir usuário!');
       setError(err);
     }
     setIsLoading(false);
@@ -64,6 +68,7 @@ const AdminPanel = () => {
 
   return (
     <Layout>
+      <Alerts />
       {isLoading && <Loading />}
       <div className="form-box-adminpanel"> 
         <div className="form-content-adminpanel"> 
