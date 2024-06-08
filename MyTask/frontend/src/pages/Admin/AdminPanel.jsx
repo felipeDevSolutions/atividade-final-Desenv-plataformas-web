@@ -4,14 +4,14 @@ import Layout from '../../components/layout/Layout';
 import Loading from '../../components/Loading/Loading';
 import { AuthContext } from '../../context/AuthContext';
 import { useNavigate, Navigate } from 'react-router-dom';
-import '../Admin/AdminPanel.css'; 
+import './AdminPanel.css';
 import Alerts, { showSuccessToast, showErrorToast } from '../../components/layout/Alerts';
 
 const AdminPanel = () => {
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { currentUser, dispatch } = useContext(AuthContext); 
+  const { currentUser, dispatch } = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -31,7 +31,6 @@ const AdminPanel = () => {
         setIsLoading(false);
       }
     };
-
     fetchUsers();
   }, []);
 
@@ -45,20 +44,20 @@ const AdminPanel = () => {
         },
       });
       setUsers(users.filter((user) => user.id !== userId));
-
       showSuccessToast('Usuário excluído!');
 
       // Faz logout APENAS se o usuário excluído for o usuário logado
-      if (userId === currentUser.id) { 
-        dispatch({ type: "LOGOUT" }); 
-        navigate("/login"); 
+      if (userId === currentUser.id) {
+        dispatch({ type: "LOGOUT" });
+        navigate("/login");
       }
 
     } catch (err) {
       showErrorToast('Erro ao excluir usuário!');
       setError(err);
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   // Verifica se o usuário está logado
@@ -68,11 +67,11 @@ const AdminPanel = () => {
 
   return (
     <Layout>
-      <Alerts />
+      <Alerts/>
       {isLoading && <Loading />}
-      <div className="form-box-adminpanel"> 
-        <div className="form-content-adminpanel"> 
-          <h2>Gerenciamento de Usuários</h2>
+      <div className="form-box-adminpanel">
+        <div className="form-content-adminpanel">
+          <h1>Gerenciamento de Usuários</h1>
           {isLoading ? (
             <p>Carregando...</p>
           ) : error ? (
@@ -80,14 +79,11 @@ const AdminPanel = () => {
           ) : (
             <table className="user-table">
               <thead>
-                <tr>
-                  <th>Email</th>
-                  <th>Ações</th>
-                </tr>
+                
               </thead>
               <tbody>
                 {users.map((user) => (
-                  <tr key={user.id}>
+                  <tr key={user.id} className='user-item'>
                     <td>{user.email}</td>
                     <td>
                       <button className="btn btn-edit" onClick={() => navigate(`/users/${user.id}/edit`)}>
