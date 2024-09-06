@@ -88,7 +88,20 @@
   background-color: #26b7be; /* Cor do botão ao passar o mouse */
 }
 
+
+.col-12{
+  display: flex;
+  overflow-y: auto;
+}
+
+.list-group{
+  display: flex;
+  width: 100%;
+  gap: 10px;
+}
+
 .task-list { /* Lista de tarefas */
+  display: flex;
   position: sticky; /* Corrigido para 'block' */
   margin-top: 20px;
   height: calc(100vh - 40%); /* Ajusta a altura da lista de tarefas para caber no restante da tela */
@@ -96,18 +109,11 @@
   overflow-y: auto;
 }
 
-.col-12{
-  overflow-y: auto;
-}
-
-.list-group{
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
 .task-item { /* Item da lista de tarefas */
-  background-color: #1e2737; /* Cor de fundo dos itens da lista */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #1e273798; /* Cor de fundo dos itens da lista */
   color: #2ffbfe; /* Cor do texto dos itens da lista */
   border: none; /* Sem borda nos itens da lista */
   border-radius: 3px; /* Arredondamento das bordas dos itens da lista */
@@ -130,20 +136,6 @@
   background-color: #d32f2f; /* Vermelho mais escuro */
 }
 
-.task-list ul{
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  padding: 0;
-}
-
-.task-list li {
-  background-color: #141c29ce; /* Cor de fundo dos itens da lista */
-  color: #2ffbfe; /* Cor do texto dos itens da lista */
-  border: none; /* Sem borda nos itens da lista */
-  border-radius: 3px; /* Arredondamento das bordas dos itens da lista */
-  padding: 10px;
-}
 
 .task-list li:hover{
   background-color: #1b2434ce;
@@ -190,7 +182,7 @@
 .task-list button{
   display: inline-block; /* Impedir que os botões ocupem a linha inteira */
   border: none;
-  border-radius: 5px;
+  border-radius: 10px;
   font-size: 1rem;
   padding: 5px 15px;
   margin: 0 5px; /* Adicionar margem para espaçamento */
@@ -268,24 +260,32 @@
   
 
   .task-list {
+    display: flex;
     padding: 0;
     width: 100%; /* Ocupa toda a largura da tela */
-    height: calc(100vh - 200px); /* Ajusta a altura da lista */
+    height: auto;
   }
 
   .task-item {
-    flex-direction: column; /* Empilha o texto e os botões verticalmente */
-    align-items: center; /* Centraliza o texto e os botões */
-    height: 130px;
-  }
-
-
-
-  .task-item div {
-    width: 100%;
     display: flex;
-    justify-content: center;
-    align-items: center; /* Centraliza os botões */
-    margin-top: 10px;
+    text-align: left;
+    width: 100%;
+    align-items: center; /* Centraliza o texto e os botões */
+    height: auto;
+    padding: 20px;
+    gap: 10px;
   }
+
+  .button-task-item{
+    right: 10px;
+    gap: 30px;
+    margin: 0;
+    padding: 0;
+  }
+
+  .button-task-item button{
+    margin: 0;
+  }
+
+
 }

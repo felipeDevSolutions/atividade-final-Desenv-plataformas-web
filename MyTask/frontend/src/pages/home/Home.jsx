@@ -155,9 +155,9 @@ function Home() {
                 {tasks
                   .filter((task) => (showCompleted ? task.completed : !task.completed))
                   .map((task) => (
-                    <li key={task.id} className="list-group-item task-item d-flex justify-content-between align-items-center">
+                    <li key={task.id} className="list-group-item task-item">
                       {task.task}
-                      <div>
+                      <div className='button-task-item'>
                         <button
                           className="btn btn-success btn-sm mr-2 task-done-button"
                           onClick={() => handleToggleTaskComplete(task.id)}
