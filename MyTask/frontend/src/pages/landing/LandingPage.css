@@ -1,40 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
-
-.colors {
-    --main-background: #0f1013;
-    --main-fonts-color: #fff;
-    --main-decor-color: #0091ffde;
-    --main-header-background: #003b93;
-    --main-font-family: 'Poppins', sans-serif;
-}
-
-
-*{
-    margin: 0;
-    padding: 0;
-    scroll-behavior: smooth;
-}
-
-.container {
-    width: 100%;
-    max-width: 100%;
-    margin: 0 auto;
-    padding: 0; /* Adicionado padding para garantir espaço nas laterais */
-}
-
-
-
-main{
-    display: flex;
-	width: 100%;
-	height: 100%;
-    margin: 0;
-    padding: 0;
-	background: var(--main-background);
-}
 
 /*────────────────── 
-       header
+       header-landing
 ──────────────────*/
 
 .header-landing{
@@ -52,7 +18,6 @@ main{
     
 }
 
-
 .nav-show-landing{
 	opacity: 0;
 }
@@ -61,8 +26,6 @@ main{
 	opacity: 0.8;
 	background: var(--main-header-background);
 }
-
-
 
 
 .nav-bar-landing{
@@ -91,63 +54,6 @@ a.nav-link-landing{
     background: var(--main-decor-color);
 }
 
-/*──────────────────
-       home
-──────────────────*/
-
-#home{ 	
-    width: 100%;
-	height: 100vh;
-	color: var(--main-fonts-color);
-	display: flex;
-	align-items: center;
-}
-
-#home .filter{
-	background: url('https://images.unsplash.com/photo-1544099858-75feeb57f01b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80') no-repeat;
-	background-size: cover;
-    position: absolute;
-    top: 0px;
-    bottom: 0;
-    left: 0px;
-    right: 0;
-	opacity:.20;
-}  
-
-.intro {
-	text-align:center;
-    color: var(--main-fonts-color);
-	z-index: 1;
-	margin: auto;
-	padding: 20px;
-}
-
-.intro  p{
-    margin: 5px;
-	font-size:1.2rem;
-	font-family: var(--main-font-family);
-	text-align:center;
-}
-
-h3{
-	padding-bottom: 15px;
-    letter-spacing: normal;
-    font-family: var(--main-font-family);
-	font-style: normal;
-	font-size: 70px;
-	color: var(--main-fonts-color);
-	text-shadow: 0px 0px 40px var(--main-decor-color);
-}
-
-h4{
-	padding-bottom: 15px;
-    letter-spacing: normal;
-    font-family: var(--main-font-family);
-	font-style: normal;
-	font-size: 40px;
-	color: var(--main-fonts-color);
-	text-shadow: 0px 0px 40px var(--main-decor-color);
-}
 
 
 /*──────────────────

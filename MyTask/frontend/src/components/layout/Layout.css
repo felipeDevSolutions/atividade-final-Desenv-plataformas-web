@@ -1,11 +1,24 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
+
+
 
 .colors {
-    --main-background: #0f1013;
-    --main-fonts-color: #fff;
+    --main-background: #a9a9a965;
+    --main-fonts-color: #111111;
+    --second-fonts-color: #2d2d2db8;
+    --blue-fonts-color: #101bb8;
+    --blue-hover-fonts-color: #525dff;
+    --red-fonts-color: #d01313;
+    --red-hover-fonts-color: #c20000;
     --main-decor-color: #20afb1;
-    --main-header-background: #0b3046;
-    --main-font-family: 'Poppins', sans-serif;
+    --main-header-background: #00868dc8;
+    --main-blue-border-shadow: #6ac3c6;
+    --main-font-family: "Patrick Hand SC", cursive;
+    --second-font-family: "Nanum Brush Script", cursive;
+    --third-font-family: "Shantell Sans", cursive;
+    --fourth-font-family: "Just Me Again Down Here", cursive;
+    --fifth-font-family: "Sue Ellen Francisco", cursive;
+    --sixth-font-family: "Square Peg", cursive;
+    --seventh-font-family: "Just Another Hand", cursive;
 }
 
 
@@ -51,6 +64,8 @@ main{
 	transition: 0.3s;
 	z-index: 5;
     opacity: 0;
+	margin: 0;
+	padding: 0;
 }
 
 
@@ -62,9 +77,6 @@ main{
 	opacity: 0.8;
 	background: var(--main-header-background);
 }
-
-
-
 
 .nav-bar{
 	list-style:none;
@@ -105,16 +117,16 @@ a.nav-link{
 }
 
 #home .filter{
-	background: url('https://images.unsplash.com/photo-1544099858-75feeb57f01b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80') no-repeat;
-	background-size: cover;
+	background: url('../../static/Quadro\ 1.png') no-repeat;
+	background-size:cover;
 	background-position:center;
-    position: absolute;
+    position: fixed;
     top: 0px;
 	height: 100%;
     bottom: 0;
     left: 0px;
     right: 0;
-	opacity:.20;
+	opacity:100;
 }  
 
 .intro {
@@ -122,7 +134,7 @@ a.nav-link{
     color: var(--main-fonts-color);
 	z-index: 1;
 	margin: auto;
-	padding: 20px;
+	padding: 0px;
 }
 
 .intro  p{
@@ -139,7 +151,6 @@ h3{
 	font-style: normal;
 	font-size: 70px;
 	color: var(--main-fonts-color);
-	text-shadow: 0px 0px 40px var(--main-decor-color);
 }
 
 h4{
@@ -148,8 +159,7 @@ h4{
     font-family: var(--main-font-family);
 	font-style: normal;
 	font-size: 40px;
-	color: var(--main-fonts-color);
-	text-shadow: 0px 0px 40px var(--main-decor-color);
+	color: var(--blue-fonts-color);
 }
 
 
@@ -185,20 +195,21 @@ h4{
 
 /* Estilo moderno para a barra de rolagem */
 ::-webkit-scrollbar {
-	width: 10px;
+	width: 5px;
+	height: 6px;
   }
   
   ::-webkit-scrollbar-track {
-	background: #111822; /* Cor de fundo da barra de rolagem */
+	background: #888; /* Cor de fundo da barra de rolagem */
   }
   
   ::-webkit-scrollbar-thumb {
-	background: #888; /* Cor do botão da barra de rolagem */
+	background: #26b7be; /* Cor do botão da barra de rolagem */
 	border-radius: 10px; /* Arredonda as bordas do botão */
   }
   
 ::-webkit-scrollbar-thumb:hover {
-background: #555; /* Cor do botão ao passar o mouse */
+background: #32d7df; /* Cor do botão ao passar o mouse */
 }
 
   

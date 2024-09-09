@@ -3,7 +3,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: var(--main-font-family);
 }
 
 body {
@@ -15,33 +15,36 @@ body {
     display: flex; /* Altere a exibição para flex */
     justify-content: center;
     position: fixed;
-    top: 53%;
+    top: 50%;
     left: 50%;
     max-width: 720px;
-    background-color: transparent;
-    border: 2px solid #2ffbfe;
     transform: translate(-50%, -50%);
-    border-radius: 8px;
-    box-shadow: 5px 5px 80px #006395;
+    box-shadow: 2px 2px 20px #8298a97b;
     opacity: 100;
+
+    backdrop-filter: blur(8px) saturate(159%);
+    -webkit-backdrop-filter: blur(10px) saturate(159%);
+    background-color: rgba(255, 255, 255, 0.16);
+    border-radius: 12px;
+    border: 1px solid rgba(173, 186, 205, 0.282);
 }
 
 .form-popup .form-box {
     display: flex;
-    
 }
 
 .form-box h2 {
     justify-content: baseline;
     text-align: center;
     margin-top: 5px;
-    color: #fff;
+    color: var(--main-fonts-color);
 }
 
 .form-box .form-content {
     display: flex;
     flex-direction: column;
     width: 100%;
+    height: 78vh;
     padding: 10px 20px;
     align-items: center;
 }
@@ -49,8 +52,10 @@ body {
 form .input-field {
     height: 45px;
     width: 100%;
-    margin-top: 15px;
+    margin-top: 0px;
+    margin-bottom: 20px;
     position: relative;
+    font-family: var(--third-font-family);
 }
 
 form .input-field-terms{
@@ -59,15 +64,21 @@ form .input-field-terms{
     align-items: center;
     height: 45px;
     width: 100%;
-    margin-top: 15px;
     position: relative;
     padding: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+form .input-field-terms button{
+    margin: 0;
+    padding: 0;
 }
 
 form .input-field-terms label{
     display: flex;
     gap: 10px;
-    font-size: small;
+    font-size:medium;
 }
 
 form .input-field-redefinir {
@@ -87,39 +98,40 @@ form .input-field-redefinir input {
     outline-style: none;
     border-style: none;
     border-radius: 3px;
-    background-color: #1e27378c;
-    color: #2dfafd;
+    background-color: #1e273725;
+    color: var(--main-fonts-color);
 }
 
 .input-field label {
     position: absolute;
-    top: 12px; /* Posição inicial da label */
+    top: 8px; /* Posição inicial da label */
     left: 15px;
-    color: #717171; /* Cor da label */
+    color: var(--main-fonts-color);
     pointer-events: none; 
     transition: 0.2s ease; /* Transição suave */
-    font-size: 1rem; /* Tamanho da fonte da label */
+    font-size: 1.2rem; /* Tamanho da fonte da label */
     margin-bottom: 5px; /* Adiciona um espaçamento maior para a label dos termos */
 }
 
 .input-field input:focus {
-    border: 2px solid #2ffbfe;
-    border-color: #2ffbfe;
+    border: 2px solid;
+    border-color: var(--main-blue-border-shadow)
 }
 
 .input-field input:is(:focus, :valid) {
     padding: 16px 15px 0;
-    border-color: #2ffbfe;
+    border-color: var(--main-blue-border-shadow)
     
 }
 
 .input-field input:is(:focus, :valid) ~ label {
-    font-size: 0.75rem; /* Tamanho da fonte da label em foco */
-    top: 5px; /* Posição da label em foco */
+    font-size: 0.95rem; /* Tamanho da fonte da label em foco */
+    top: 2px; /* Posição da label em foco */
+    color: var(--second-fonts-color);
 }
 
 .form-box a {
-    color: #ffffff;
+    color: var(--blue-fonts-color);
     text-decoration: none;
 }
 
@@ -131,7 +143,7 @@ form .input-field-redefinir input {
     display: inline-flex;
     margin-top: 14px;
     font-size: 0.95rem;
-    color: #fff;
+    color: var(--main-fonts-color);
 }
 
 .input-fieldError {
@@ -148,7 +160,7 @@ form button {
     font-weight: 500;
     padding: 14px 0;
     border-radius: 3px;
-    margin: 25px 0;
+    margin: 0;
     color: #fff;
     cursor: pointer;
     background-color: #1f9398;
@@ -161,7 +173,7 @@ form button:hover {
 
 .form-box .bottom-link {
     text-align: center;
-    color: #fff;
+    color: var(--main-fonts-color);
     font-size: 0.95rem;
     margin-top: 1rem;
     display: flex;
@@ -170,7 +182,7 @@ form button:hover {
   }
   
   .form-box .bottom-link a {
-    color: #2ffbfe; /* Cor do link */
+    color: var(--blue-fonts-color);
     text-decoration: none;
     margin-left: 0.5rem; /* Espaçamento entre o texto e o link */
     font-weight: bold; /* Estilo do link */
@@ -179,12 +191,12 @@ form button:hover {
   
   .form-box .bottom-link a:hover {
     text-decoration: underline;
-    color: #fff; /* Cor do link ao passar o mouse */
+    color: var(--blue-hover-fonts-color);
   }
   
   .form-box .forgot-password {
     text-align: center;
-    color: #fff;
+    color: var(--main-fonts-color);
     font-size: 0.95rem;
     margin-top: 1rem;
     display: flex;
@@ -194,7 +206,7 @@ form button:hover {
 
   .form-box .forgot-password-message {
     text-align: center;
-    color: #fff;
+    color: var(--red-fonts-color);
     font-size: 0.95rem;
     margin-top: 1rem;
     display: flex;
@@ -203,7 +215,7 @@ form button:hover {
   }
   
   .form-box .forgot-password a {
-    color: #2ffbfe; /* Cor do link */
+    color: var(--red-fonts-color);
     text-decoration: none;
     margin-left: 0.5rem; /* Espaçamento entre o texto e o link */
     font-weight: bold; /* Estilo do link */
@@ -212,7 +224,7 @@ form button:hover {
   
   .form-box .forgot-password a:hover {
     text-decoration: underline;
-    color: #fff; /* Cor do link ao passar o mouse */
+    color: var(--red-hover-fonts-color);
   }
 
 .input-field input[type="checkbox"] {

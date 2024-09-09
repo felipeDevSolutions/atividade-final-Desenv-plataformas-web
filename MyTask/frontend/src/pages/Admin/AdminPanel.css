@@ -2,14 +2,11 @@ body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: Arial, Helvetica, sans-serif;
-}
-body {
   width: 100%;
   height: 100vh;
-  background-color: #1e2737; /* Fundo escuro */
-  color: #2ffbfe; /* Texto em azul claro */
+  background-color: #73737371; /* Fundo escuro */
 }
+
 .form-box-adminpanel {
   display: flex;
   flex-direction: column; /* Organize os elementos verticalmente */
@@ -18,7 +15,7 @@ body {
   top: 50%;
   left: 50%;
   width: 90%; /* Ajuste para tela menor */
-  background-color: #1e2737; /* Fundo escuro */
+  background-color: #acacac4c; /* Fundo escuro */
   border: 2px solid #2ffbfe; /* Borda azul */
   transform: translate(-50%, -50%);
   border-radius: 8px; /* Arredondamento das bordas */
@@ -26,6 +23,7 @@ body {
   opacity: 100;
   padding: 20px; /* Espaçamento interno */
 }
+
 .form-content-adminpanel {
   display: flex;
   flex-direction: column; /* Organize os elementos verticalmente */
@@ -34,6 +32,7 @@ body {
   align-items: center;
   flex-wrap: wrap;
 }
+
 .user-table {
   width: 100%;
   border-collapse: collapse;
@@ -42,19 +41,23 @@ body {
   color: #2ffbfe;
   border-radius: 8px; /* Arredonda as bordas da tabela */
 }
+
 .user-table th, .user-table td {
   padding: 10px;
   text-align: left;
   border-bottom: 1px solid #2ffbfe; /* Linha de separação azul */
 }
+
 .user-table th {
   background-color: #1e2737;
   color: #2ffbfe;
   font-weight: bold;
 }
+
 .user-table tr:hover {
   background-color: #23304d; /* Cor de destaque ao passar o mouse */
 }
+
 .user-table button {
   padding: 5px 10px;
   margin: 0 5px;
@@ -67,20 +70,25 @@ body {
   display: inline-block; /* Faz com que os botões fiquem lado a lado */
   font-size: 14px; /* Ajuste o tamanho da fonte */
 }
+
 .user-table .btn-edit {
   background-color: #1f9398; /* Azul padrão */
 }
+
 .user-table .btn-edit:hover {
   background-color: #26b7be; /* Azul mais escuro */
   color: #fff;
 }
+
 .user-table .btn-delete {
   background-color: #8d1515; /* Vermelho */
 }
+
 .user-table .btn-delete:hover {
   background-color: #b31a1a; /* Vermelho mais escuro */
   color: #fff;
 }
+
 /* Responsividade (Media Queries) */
 @media (max-width: 600px) {
   .form-box-adminpanel {

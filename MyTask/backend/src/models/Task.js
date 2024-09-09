@@ -1,16 +1,27 @@
 const { db, admin } = require('../../firebaseConfig');
 
 const Task = {
-  // Cria uma nova tarefa
-  async create(userId, taskData) {
+  async create(userId, projectId, sectionId, taskData) {
     try {
-      const docRef = await db.collection('users').doc(userId).collection('tasks').add({
-        task: taskData.task,
-        completed: false,
-        createdAt: admin.firestore.FieldValue.serverTimestamp(),
-      });
+      const docRef = await db
+        .collection('users')
+        .doc(userId)
+        .collection('projects') 
+        .doc(projectId)
+        .collection('sections') 
+        .doc(sectionId)
+        .collection('tasks') 
+        .add({
+          title: taskData.title,
+          description: '', // Descrição inicial vazia
+          dueDate: null,     // Prazo inicial nulo
+          comments: [],     // Comentários iniciais vazios
+          checklist: [],    // Checklist inicial vazio
+          collaborators: [], // Colaboradores iniciais vazios
+          completed: false,
+          createdAt: admin.firestore.FieldValue.serverTimestamp(),
+        });
 
-      // Recupera a tarefa criada com o timestamp
       const taskDoc = await docRef.get();
       const task = {
         id: taskDoc.id,
@@ -26,10 +37,16 @@ const Task = {
     }
   },
 
-  // Recupera todas as tarefas de um usuário
-  async getByUser(userId) {
+  async getBySection(userId, projectId, sectionId) {
     try {
-      const tasksRef = db.collection('users').doc(userId).collection('tasks');
+      const tasksRef = db
+        .collection('users') // Referência à coleção 'users'
+        .doc(userId) 
+        .collection('projects')
+        .doc(projectId)
+        .collection('sections')
+        .doc(sectionId)
+        .collection('tasks');
       const tasksSnapshot = await tasksRef.get();
       const tasks = [];
 
@@ -37,7 +54,7 @@ const Task = {
         const task = {
           id: doc.id,
           ...doc.data(),
-          createdAt: doc.data().createdAt.toDate(), // Converte o timestamp do Firestore para Date
+          createdAt: doc.data().createdAt.toDate(), 
         };
         tasks.push(task);
       });
@@ -49,16 +66,43 @@ const Task = {
     }
   },
 
-  // Exclui uma tarefa
-  async delete(userId, taskId) {
+  async update(userId, projectId, sectionId, taskId, updatedTaskData) {
     try {
-      await db.collection('users').doc(userId).collection('tasks').doc(taskId).delete();
+      await db
+        .collection('users')
+        .doc(userId) 
+        .collection('projects')
+        .doc(projectId)
+        .collection('sections')
+        .doc(sectionId)
+        .collection('tasks') 
+        .doc(taskId) 
+        .update(updatedTaskData);
+      return true; 
+    } catch (error) {
+      console.error('Erro ao atualizar tarefa:', error);
+      throw error;
+    }
+  },
+
+  async delete(userId, projectId, sectionId, taskId) {
+    try {
+      await db
+        .collection('users')
+        .doc(userId) 
+        .collection('projects')
+        .doc(projectId)
+        .collection('sections')
+        .doc(sectionId)
+        .collection('tasks') 
+        .doc(taskId) 
+        .delete();
       return true;
     } catch (error) {
       console.error('Erro ao excluir tarefa:', error);
       throw error;
     }
-  }
+  },
 };
 
 module.exports = Task;

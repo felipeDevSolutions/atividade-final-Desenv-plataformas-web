@@ -4,13 +4,14 @@ import LandingPage from './pages/landing/LandingPage';
 import Login from './pages/auth/login/Login';
 import Signup from './pages/auth/signup/signup';
 import Home from './pages/home/Home'; 
+import Project from './pages/ProjectPage/Project';
 import AdminPanel from './pages/Admin/AdminPanel';
 import EditUser from './pages/auth/EditUser/EditUser';
 import { AuthContext } from './context/AuthContext';
 import ForgotPassword from './pages/auth/resetPassword/ForgotPassword';
-import ResetPassword from './pages/auth/resetPassword/resetPassword';
 import Loading from './components/Loading/Loading';
 import Terms from './pages/utils/terms'; 
+
 
 const RequireAuth = ({ children }) => {
   const { currentUser } = useContext(AuthContext);
@@ -38,9 +39,9 @@ function App() {
             <Route path="/signup" element={currentUser ? <Navigate to="/home" /> : <Signup />} />
             <Route path="/forgot-password" element={<ForgotPassword />} /> 
             <Route path="/home" element={<RequireAuth><Home /></RequireAuth>} />
+            <Route path="/project/:projectId" element={<RequireAuth><Project /></RequireAuth>} />
             <Route path="/admin" element={<RequireAuth><AdminPanel /></RequireAuth>} />
             <Route path="/users/:userId/edit" element={<RequireAuth><EditUser /></RequireAuth>} />
-            <Route path="/reset-password/:oobCode" element={<ResetPassword />} />
             <Route path="/terms" element={<Terms />} />
           </Routes>
         </Router>

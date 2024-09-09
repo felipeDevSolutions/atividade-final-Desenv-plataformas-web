@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 const bcryptjs = require('bcryptjs');
 const userRouter = require('./routes/userRoutes');
 const authRouter = require('./routes/authRoutes');
-const taskRoutes = require('./routes/taskRoutes');
+const projectRouter = require('./routes/projectRoutes');
 
 dotenv.config();
 
@@ -38,7 +38,7 @@ const authenticateToken = (req, res, next) => {
 // Rotas
 app.use('/api/users', authenticateToken, userRouter);
 app.use('/api', authRouter);
-app.use('/api/tasks', taskRoutes);
+app.use('/api/projects', projectRouter);
 
 // Iniciar o servidor
 app.listen(port, () => {
