@@ -69,7 +69,6 @@ const AdminPanel = () => {
     <Layout>
       <Alerts/>
       {isLoading && <Loading />}
-      <div className="form-box-adminpanel">
         <div className="form-content-adminpanel">
           <h1>Gerenciamento de Usuários</h1>
           {isLoading ? (
@@ -99,7 +98,6 @@ const AdminPanel = () => {
             </table>
           )}
         </div>
-      </div>
     </Layout>
   );
 };

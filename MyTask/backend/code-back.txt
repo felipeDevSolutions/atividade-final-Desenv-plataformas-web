@@ -4,15 +4,21 @@ BACKEND:
  ┣ 📂node_modules
  ┣ 📂src
  ┃ ┣ 📂controllers
+ ┃ ┃ ┣ 📜projectController.js
+ ┃ ┃ ┣ 📜sectionController.js
  ┃ ┃ ┣ 📜taskController.js
  ┃ ┃ ┗ 📜UserController.js
  ┃ ┣ 📂middleware
  ┃ ┃ ┗ 📜authMiddleware.js
  ┃ ┣ 📂models
+ ┃ ┃ ┣ 📜Project.js
+ ┃ ┃ ┣ 📜Section.js
  ┃ ┃ ┣ 📜Task.js
  ┃ ┃ ┗ 📜user.js
  ┃ ┣ 📂routes
  ┃ ┃ ┣ 📜authRoutes.js
+ ┃ ┃ ┣ 📜projectRoutes.js
+ ┃ ┃ ┣ 📜sectionRoutes.js
  ┃ ┃ ┣ 📜taskRoutes.js
  ┃ ┃ ┗ 📜userRoutes.js
  ┃ ┣ 📂tests
@@ -21,6 +27,7 @@ BACKEND:
  ┃ ┗ 📜vercel.json
  ┣ 📜.env
  ┣ 📜.gitignore
+ ┣ 📜code-back projects.txt
  ┣ 📜code-back.txt
  ┣ 📜firebase-service-account.json
  ┣ 📜firebaseConfig.js
@@ -37,7 +44,7 @@ const jwt = require('jsonwebtoken');
 const bcryptjs = require('bcryptjs');
 const userRouter = require('./routes/userRoutes');
 const authRouter = require('./routes/authRoutes');
-const taskRoutes = require('./routes/taskRoutes');
+const projectRouter = require('./routes/projectRoutes');
 
 dotenv.config();
 
@@ -69,7 +76,7 @@ const authenticateToken = (req, res, next) => {
 // Rotas
 app.use('/api/users', authenticateToken, userRouter);
 app.use('/api', authRouter);
-app.use('/api/tasks', taskRoutes);
+app.use('/api/projects', projectRouter);
 
 // Iniciar o servidor
 app.listen(port, () => {
@@ -460,20 +467,571 @@ module.exports = router;
 ====================================================================================================
 
 
-Task.js:
+Project.js:
 const { db, admin } = require('../../firebaseConfig');
 
-const Task = {
-  // Cria uma nova tarefa
-  async create(userId, taskData) {
+const Project = {
+  // Cria uma novo projeto
+  async create(userId, projectData) {
     try {
-      const docRef = await db.collection('users').doc(userId).collection('tasks').add({
-        task: taskData.task,
+      const docRef = await db.collection('users').doc(userId).collection('projects').add({
+        project: projectData.project,
         completed: false,
         createdAt: admin.firestore.FieldValue.serverTimestamp(),
       });
 
-      // Recupera a tarefa criada com o timestamp
+      // Recupera o projeto criado com o timestamp
+      const projectDoc = await docRef.get();
+      const project = {
+        id: projectDoc.id,
+        ...projectData,
+        completed: false,
+        createdAt: projectDoc.data().createdAt.toDate(), 
+      };
+
+      return project; 
+    } catch (error) {
+      console.error('Erro ao criar tarefa:', error);
+      throw error;
+    }
+  },
+
+  // Recupera todas os projetos de um usuário
+  async getByUser(userId) {
+    try {
+      const projectsRef = db.collection('users').doc(userId).collection('projects');
+      const projectsSnapshot = await projectsRef.get();
+      const projects = [];
+
+      projectsSnapshot.forEach(doc => {
+        const project = {
+          id: doc.id,
+          ...doc.data(),
+          createdAt: doc.data().createdAt.toDate(), // Converte o timestamp do Firestore para Date
+        };
+        projects.push(project);
+      });
+
+      return projects;
+    } catch (error) {
+      console.error('Erro ao recuperar tarefas:', error);
+      throw error;
+    }
+  },
+
+  // Busca um projeto pelo ID
+  async getById(userId, projectId) {
+    try {
+      // Implemente a lógica para buscar o projeto pelo ID no Firebase
+      const projectDoc = await db.collection('users').doc(userId).collection('projects').doc(projectId).get();
+
+      if (projectDoc.exists) {
+        return { id: projectDoc.id, ...projectDoc.data() };
+      } else {
+        return null; // Retorna null se o projeto não for encontrado
+      }
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  // Project.js 
+  async findById(userId, projectId) { // Adicione userId como parâmetro
+    try {
+      const projectDoc = await db.collection('users').doc(userId).collection('projects').doc(projectId).get();
+      if (projectDoc.exists) {
+        return { id: projectDoc.id, ...projectDoc.data() };
+      } else {
+        return null; 
+      }
+    } catch (error) {
+      throw error; 
+    }
+  },
+
+  // Exclui um projeto
+  async delete(userId, projectId) {
+    try {
+      await db.collection('users').doc(userId).collection('projects').doc(projectId).delete();
+      return true;
+    } catch (error) {
+      console.error('Erro ao excluir tarefa:', error);
+      throw error;
+    }
+  },
+
+  // Adicionar subtarefa a um projeto
+  async addSubtask(userId, projectId, subtaskData) {
+    try {
+      const projectRef = db.collection('users').doc(userId).collection('projects').doc(projectId);
+      const projectDoc = await projectRef.get();
+
+      if (!projectDoc.exists) {
+        throw new Error('Projeto não encontrado.');
+      }
+
+      const newSubtask = {
+        id: db.collection('users').doc().id, // ID único para a subtarefa
+        ...subtaskData,
+        completed: false,
+      };
+
+      await projectRef.update({
+        subtasks: admin.firestore.FieldValue.arrayUnion(newSubtask),
+      });
+
+      return newSubtask;
+    } catch (error) {
+      console.error('Erro ao adicionar subtarefa:', error);
+      throw error;
+    }
+  },
+
+  // Editar subtarefa de um projeto
+  async updateSubtask(userId, projectId, subtaskId, subtaskData) {
+    try {
+      const projectRef = db.collection('users').doc(userId).collection('projects').doc(projectId);
+      const projectDoc = await projectRef.get();
+
+      if (!projectDoc.exists) {
+        throw new Error('Projeto não encontrado.');
+      }
+
+      const subtasks = projectDoc.data().subtasks;
+      const subtaskIndex = subtasks.findIndex((subtask) => subtask.id === subtaskId);
+
+      if (subtaskIndex === -1) {
+        throw new Error('Subtarefa não encontrada.');
+      }
+
+      subtasks[subtaskIndex] = { ...subtasks[subtaskIndex], ...subtaskData };
+
+      await projectRef.update({ subtasks });
+    } catch (error) {
+      console.error('Erro ao editar subtarefa:', error);
+      throw error;
+    }
+  },
+
+  // Marcar subtarefa como concluída
+  async toggleSubtaskComplete(userId, projectId, subtaskId) {
+    try {
+      const projectRef = db.collection('users').doc(userId).collection('projects').doc(projectId);
+      const projectDoc = await projectRef.get();
+
+      if (!projectDoc.exists) {
+        throw new Error('Projeto não encontrado.');
+      }
+
+      const subtasks = projectDoc.data().subtasks;
+      const subtaskIndex = subtasks.findIndex((subtask) => subtask.id === subtaskId);
+
+      if (subtaskIndex === -1) {
+        throw new Error('Subtarefa não encontrada.');
+      }
+
+      subtasks[subtaskIndex].completed = !subtasks[subtaskIndex].completed;
+
+      await projectRef.update({ subtasks });
+    } catch (error) {
+      console.error('Erro ao atualizar subtarefa:', error);
+      throw error;
+    }
+  },
+
+  // Remover subtarefa de um projeto
+  async deleteSubtask(userId, projectId, subtaskId) {
+    try {
+      const projectRef = db.collection('users').doc(userId).collection('projects').doc(projectId);
+
+      await projectRef.update({
+        subtasks: admin.firestore.FieldValue.arrayRemove({ id: subtaskId }),
+      });
+    } catch (error) {
+      console.error('Erro ao deletar subtarefa:', error);
+      throw error;
+    }
+  },
+};
+
+module.exports = Project;
+
+
+==================================================================================================
+
+
+projectController.js:
+const Project = require('../models/Project');
+const Task = require('../models/Task');
+const Section = require('../models/Section');
+const authenticateToken = require('../middleware/authMiddleware');
+const { db } = require('../../firebaseConfig');
+
+const projectController = {
+  // Cria uma nova tarefa
+  async create(req, res) {
+    try {
+      const { project } = req.body;
+      const newProject = await Project.create(req.user.id, { project });
+      res.status(201).json(newProject);
+    } catch (error) {
+      res.status(500).json({ message: 'Erro ao criar tarefa.' });
+    }
+  },
+
+  // Recupera todas as tarefas do usuário
+  async getProjects(req, res) {
+    try {
+      const projects = await Project.getByUser(req.user.id);
+      res.status(200).json(projects);
+    } catch (error) {
+      res.status(500).json({ message: 'Erro ao recuperar tarefas.' });
+    }
+  },
+
+  // Recupera um projeto pelo ID
+  async getProjectById(req, res) {
+    try {
+      const projectId = req.params.projectId;
+      const project = await Project.getById(req.user.id, projectId); // Implemente este método no seu Model
+
+      if (project) {
+        res.status(200).json(project);
+      } else {
+        res.status(404).json({ message: 'Projeto não encontrado.' });
+      }
+    } catch (error) {
+      res.status(500).json({ message: 'Erro ao recuperar o projeto.' });
+    }
+  },
+
+  // Exclui uma tarefa
+  async deleteProject(req, res) {
+    try {
+      const projectId = req.params.projectId;
+      const userId = req.user.id; // Obter o userId do token
+  
+      // Exclua todas as seções do projeto
+      const sections = await Section.getByProject(userId, projectId); // Passar userId
+      for (const section of sections) {
+        // Exclua todas as tarefas da seção
+        const tasks = await Task.getBySection(userId, projectId, section.id); // Passar userId
+        for (const task of tasks) {
+          await Task.delete(userId, projectId, section.id, task.id); // Passar userId
+        }
+        await Section.delete(userId, projectId, section.id); // Passar userId
+      }
+  
+      await Project.delete(userId, projectId);
+      res.status(204).send();
+    } catch (error) {
+      console.error('Erro ao excluir projeto:', error); // Logar erro no servidor
+      res.status(500).json({ message: 'Erro ao excluir projeto.' });
+    }
+  },
+
+  // Marca uma tarefa como concluída ou não concluída
+  async toggleComplete(req, res) {
+    try {
+      const projectId = req.params.projectId;
+      const projectRef = db.collection('users').doc(req.user.id).collection('projects').doc(projectId);
+
+      // Obtenha o status atual da tarefa
+      const currentProject = await projectRef.get();
+
+      // Verifica se a tarefa existe
+      if (currentProject.exists) {
+        const currentCompleted = currentProject.data().completed; // Obter o valor atual de completed
+
+        // Atualiza o status da tarefa com o valor inverso
+        await projectRef.update({ completed: !currentCompleted }); 
+        res.status(204).send();
+      } else {
+        res.status(404).json({ message: 'Tarefa não encontrada.' }); 
+      }
+    } catch (error) {
+      res.status(500).json({ message: 'Erro ao atualizar tarefa.' });
+    }
+  },
+
+  // Criar subtarefa
+  async createSubtask(req, res) {
+    try {
+      const projectId = req.params.projectId;
+      const { description } = req.body;
+      const newSubtask = await Project.addSubtask(req.user.id, projectId, { description });
+      res.status(201).json(newSubtask);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
+
+  // Editar subtarefa
+  async updateSubtask(req, res) {
+    try {
+      const projectId = req.params.projectId;
+      const subtaskId = req.params.subtaskId;
+      const { description, completed } = req.body; // Permite editar descrição e status de conclusão
+      await Project.updateSubtask(req.user.id, projectId, subtaskId, { description, completed });
+      res.status(200).json({ message: 'Subtarefa atualizada com sucesso!' });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
+
+  // Marcar/desmarcar subtarefa como concluída
+  async toggleSubtaskComplete(req, res) {
+    try {
+      const projectId = req.params.projectId;
+      const subtaskId = req.params.subtaskId;
+      await Project.toggleSubtaskComplete(req.user.id, projectId, subtaskId);
+      res.status(200).json({ message: 'Subtarefa atualizada com sucesso!' });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
+
+  // Remover subtarefa
+  async deleteSubtask(req, res) {
+    try {
+      const projectId = req.params.projectId;
+      const subtaskId = req.params.subtaskId;
+      await Project.deleteSubtask(req.user.id, projectId, subtaskId);
+      res.status(204).send(); // 204 No Content
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
+
+};
+
+module.exports = projectController;
+
+
+=======================================================================================================
+
+
+projectRoutes.js:
+const express = require('express');
+const router = express.Router();
+const projectController = require('../controllers/projectController');
+const authenticateToken = require('../middleware/authMiddleware');
+
+// **Importe as rotas de seções e tarefas**
+const sectionRoutes = require('./sectionRoutes');
+const taskRoutes = require('./taskRoutes');
+
+// Cria uma novo projeto
+router.post('/', authenticateToken, projectController.create);
+
+// Recupera todas os projetos do usuário
+router.get('/', authenticateToken, projectController.getProjects);
+
+// Marca um projeto como concluído ou não concluído
+router.put('/:projectId/complete', authenticateToken, projectController.toggleComplete);
+
+// Exclui um projeto
+router.delete('/:projectId', authenticateToken, projectController.deleteProject);
+
+// Rotas para subtarefas
+router.post('/:projectId/subtasks', authenticateToken, projectController.createSubtask);
+router.put('/:projectId/subtasks/:subtaskId', authenticateToken, projectController.updateSubtask);
+router.put('/:projectId/subtasks/:subtaskId/complete', authenticateToken, projectController.toggleSubtaskComplete);
+router.delete('/:projectId/subtasks/:subtaskId', authenticateToken, projectController.deleteSubtask);
+
+// Rota para seções (integração)
+router.use('/:projectId/sections', sectionRoutes); 
+
+// Rota para tarefas (integração)
+router.use('/:projectId/sections/:sectionId/tasks', taskRoutes); 
+
+// Recupera um projeto específico pelo ID
+router.get('/:projectId', authenticateToken, projectController.getProjectById);
+
+module.exports = router;
+
+
+==============================================================================================================
+
+
+Section.js:
+const { db, admin } = require('../../firebaseConfig');
+
+const Section = {
+  async create(userId, projectId, sectionData) {
+    try {
+      const docRef = await db
+        .collection('users')
+        .doc(userId)
+        .collection('projects') 
+        .doc(projectId)
+        .collection('sections')
+        .add({
+          name: sectionData.name,
+          createdAt: admin.firestore.FieldValue.serverTimestamp(),
+        });
+
+      const sectionDoc = await docRef.get();
+      const section = {
+        id: sectionDoc.id,
+        ...sectionData, 
+        createdAt: sectionDoc.data().createdAt.toDate(),
+      };
+
+      return section; 
+    } catch (error) {
+      console.error('Erro ao criar seção:', error);
+      throw error;
+    }
+  },
+
+  async getByProject(userId, projectId) { 
+    try {
+      const sectionsRef = db
+        .collection('users')
+        .doc(userId)
+        .collection('projects') 
+        .doc(projectId)
+        .collection('sections'); 
+      const sectionsSnapshot = await sectionsRef.get();
+      const sections = [];
+
+      sectionsSnapshot.forEach(doc => {
+        const section = {
+          id: doc.id,
+          ...doc.data(),
+          createdAt: doc.data().createdAt.toDate(), 
+        };
+        sections.push(section);
+      });
+
+      return sections;
+    } catch (error) {
+      console.error('Erro ao recuperar seções:', error);
+      throw error;
+    }
+  },
+
+  async delete(userId, projectId, sectionId) { 
+    try {
+      await db
+        .collection('users')
+        .doc(userId)
+        .collection('projects') 
+        .doc(projectId)
+        .collection('sections') 
+        .doc(sectionId)
+        .delete();
+      return true;
+    } catch (error) {
+      console.error('Erro ao excluir seção:', error);
+      throw error;
+    }
+  },
+};
+
+module.exports = Section;
+
+===================================================================================================================
+
+
+sectionController.js:
+// sectionController.js
+const Section = require('../models/Section');
+const Project = require('../models/Project');
+const authenticateToken = require('../middleware/authMiddleware');
+
+const sectionController = {
+  async create(req, res) {
+    try {
+      const { name } = req.body;
+      const projectId = req.params.projectId;
+      
+      // Verifica se o projeto existe
+      const project = await Project.findById(req.user.id, projectId);
+      if (!project) {
+        return res.status(404).json({ message: 'Projeto não encontrado.' });
+      }
+  
+      const newSection = await Section.create(req.user.id, projectId, { name });
+      res.status(201).json(newSection);
+    } catch (error) {
+      res.status(500).json({ message: 'Erro ao criar seção.' });
+    }
+  },
+
+  async getSections(req, res) {
+    try {
+      const projectId = req.params.projectId; 
+      const userId = req.user.id; // Obter o userId
+      const sections = await Section.getByProject(userId, projectId); // Passa o userId e projectId
+      res.status(200).json(sections);
+    } catch (error) {
+      res.status(500).json({ message: 'Erro ao recuperar seções.' });
+    }
+  },
+
+  async deleteSection(req, res) {
+    try {
+      const { projectId, sectionId } = req.params; 
+      const userId = req.user.id; // Obter o userId do token
+      await Section.delete(userId, projectId, sectionId); // Passa o userId
+      res.status(204).send(); 
+    } catch (error) {
+      console.error('Erro ao excluir seção:', error); // Logar o erro no servidor
+      res.status(500).json({ message: 'Erro ao excluir seção.' });
+    }
+  },
+};
+
+module.exports = sectionController;
+
+
+=================================================================================================================
+
+
+sectionRoutes.js:
+// sectionRoutes.js
+const express = require('express');
+const router = express.Router({ mergeParams: true });
+const sectionController = require('../controllers/sectionController');
+const authenticateToken = require('../middleware/authMiddleware'); 
+
+router.post('/', authenticateToken, sectionController.create);
+router.get('/', authenticateToken, sectionController.getSections);
+router.delete('/:sectionId', authenticateToken, sectionController.deleteSection);
+
+module.exports = router;
+
+
+==================================================================================================================
+
+
+Task.js:
+const { db, admin } = require('../../firebaseConfig');
+
+const Task = {
+  async create(userId, projectId, sectionId, taskData) {
+    try {
+      const docRef = await db
+        .collection('users')
+        .doc(userId)
+        .collection('projects') 
+        .doc(projectId)
+        .collection('sections') 
+        .doc(sectionId)
+        .collection('tasks') 
+        .add({
+          title: taskData.title,
+          description: '', // Descrição inicial vazia
+          dueDate: null,     // Prazo inicial nulo
+          comments: [],     // Comentários iniciais vazios
+          checklist: [],    // Checklist inicial vazio
+          collaborators: [], // Colaboradores iniciais vazios
+          completed: false,
+          createdAt: admin.firestore.FieldValue.serverTimestamp(),
+        });
+
       const taskDoc = await docRef.get();
       const task = {
         id: taskDoc.id,
@@ -489,10 +1047,16 @@ const Task = {
     }
   },
 
-  // Recupera todas as tarefas de um usuário
-  async getByUser(userId) {
+  async getBySection(userId, projectId, sectionId) {
     try {
-      const tasksRef = db.collection('users').doc(userId).collection('tasks');
+      const tasksRef = db
+        .collection('users') // Referência à coleção 'users'
+        .doc(userId) 
+        .collection('projects')
+        .doc(projectId)
+        .collection('sections')
+        .doc(sectionId)
+        .collection('tasks');
       const tasksSnapshot = await tasksRef.get();
       const tasks = [];
 
@@ -500,7 +1064,7 @@ const Task = {
         const task = {
           id: doc.id,
           ...doc.data(),
-          createdAt: doc.data().createdAt.toDate(), // Converte o timestamp do Firestore para Date
+          createdAt: doc.data().createdAt.toDate(), 
         };
         tasks.push(task);
       });
@@ -512,116 +1076,127 @@ const Task = {
     }
   },
 
-  // Exclui uma tarefa
-  async delete(userId, taskId) {
+  async update(userId, projectId, sectionId, taskId, updatedTaskData) {
     try {
-      await db.collection('users').doc(userId).collection('tasks').doc(taskId).delete();
+      await db
+        .collection('users')
+        .doc(userId) 
+        .collection('projects')
+        .doc(projectId)
+        .collection('sections')
+        .doc(sectionId)
+        .collection('tasks') 
+        .doc(taskId) 
+        .update(updatedTaskData);
+      return true; 
+    } catch (error) {
+      console.error('Erro ao atualizar tarefa:', error);
+      throw error;
+    }
+  },
+
+  async delete(userId, projectId, sectionId, taskId) {
+    try {
+      await db
+        .collection('users')
+        .doc(userId) 
+        .collection('projects')
+        .doc(projectId)
+        .collection('sections')
+        .doc(sectionId)
+        .collection('tasks') 
+        .doc(taskId) 
+        .delete();
       return true;
     } catch (error) {
       console.error('Erro ao excluir tarefa:', error);
       throw error;
     }
-  }
+  },
 };
 
 module.exports = Task;
 
+===================================================================================================================
 
-==================================================================================================
 
-
-taskController.js:
+taskCOntroller.js:
 const Task = require('../models/Task');
 const authenticateToken = require('../middleware/authMiddleware');
-const { db } = require('../../firebaseConfig');
 
 const taskController = {
-  // Cria uma nova tarefa
   async create(req, res) {
     try {
-      const { task } = req.body;
-      const newTask = await Task.create(req.user.id, { task });
+      const { title } = req.body;
+      const { projectId, sectionId } = req.params;
+      const userId = req.user.id; // Obter o userId do token
+      const newTask = await Task.create(userId, projectId, sectionId, { title }); // Passar userId
       res.status(201).json(newTask);
     } catch (error) {
+      console.error('Erro ao criar tarefa:', error); // Logar o erro no servidor
       res.status(500).json({ message: 'Erro ao criar tarefa.' });
     }
   },
 
-  // Recupera todas as tarefas do usuário
   async getTasks(req, res) {
     try {
-      const tasks = await Task.getByUser(req.user.id);
+      const { projectId, sectionId } = req.params;
+      const userId = req.user.id; // Obtém o userId
+      const tasks = await Task.getBySection(userId, projectId, sectionId); // Passa o userId 
       res.status(200).json(tasks);
     } catch (error) {
       res.status(500).json({ message: 'Erro ao recuperar tarefas.' });
     }
   },
 
-  // Exclui uma tarefa
-  async deleteTask(req, res) {
+  async updateTask(req, res) {
     try {
-      const taskId = req.params.taskId;
-      await Task.delete(req.user.id, taskId);
-      res.status(204).send();
+      const { projectId, sectionId, taskId } = req.params; 
+      const userId = req.user.id; // Obter o userId do token
+      const updatedTaskData = req.body; 
+      await Task.update(userId, projectId, sectionId, taskId, updatedTaskData); // Passar userId
+      res.status(204).send(); 
     } catch (error) {
-      res.status(500).json({ message: 'Erro ao excluir tarefa.' });
+      console.error('Erro ao atualizar tarefa:', error); // Logar o erro no servidor
+      res.status(500).json({ message: 'Erro ao atualizar tarefa.' });
     }
   },
 
-  // Marca uma tarefa como concluída ou não concluída
-  async toggleComplete(req, res) {
+  async deleteTask(req, res) {
     try {
-      const taskId = req.params.taskId;
-      const taskRef = db.collection('users').doc(req.user.id).collection('tasks').doc(taskId);
-
-      // Obtenha o status atual da tarefa
-      const currentTask = await taskRef.get();
-
-      // Verifica se a tarefa existe
-      if (currentTask.exists) {
-        const currentCompleted = currentTask.data().completed; // Obter o valor atual de completed
-
-        // Atualiza o status da tarefa com o valor inverso
-        await taskRef.update({ completed: !currentCompleted }); 
-        res.status(204).send();
-      } else {
-        res.status(404).json({ message: 'Tarefa não encontrada.' }); 
-      }
+      const { projectId, sectionId, taskId } = req.params; 
+      const userId = req.user.id; // Obter o userId do token
+      await Task.delete(userId, projectId, sectionId, taskId); // Passar userId
+      res.status(204).send(); 
     } catch (error) {
-      res.status(500).json({ message: 'Erro ao atualizar tarefa.' });
+      console.error('Erro ao excluir tarefa:', error); // Logar o erro no servidor
+      res.status(500).json({ message: 'Erro ao excluir tarefa.' });
     }
-  }
+  },
 };
 
 module.exports = taskController;
 
 
-
-=======================================================================================================
+=====================================================================================================================
 
 
 taskRoutes.js:
+// taskRoutes.js
 const express = require('express');
-const router = express.Router();
+const router = express.Router({ mergeParams: true }); 
 const taskController = require('../controllers/taskController');
 const authenticateToken = require('../middleware/authMiddleware');
 
-// Cria uma nova tarefa
 router.post('/', authenticateToken, taskController.create);
-
-// Recupera todas as tarefas do usuário
 router.get('/', authenticateToken, taskController.getTasks);
-
-// Marca uma tarefa como concluída ou não concluída
-router.put('/:taskId/complete', authenticateToken, taskController.toggleComplete);
-
-// Exclui uma tarefa
+router.put('/:taskId', authenticateToken, taskController.updateTask);
 router.delete('/:taskId', authenticateToken, taskController.deleteTask);
 
 module.exports = router;
 
 
-==============================================================================================================
+================================================================================================================
 
 
 user.test.js:

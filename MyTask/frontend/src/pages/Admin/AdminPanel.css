@@ -1,61 +1,50 @@
-body {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  width: 100%;
-  height: 100vh;
-  background-color: #73737371; /* Fundo escuro */
-}
+.form-content-adminpanel{
 
-.form-box-adminpanel {
+  width: 95vw;
+  min-width: 1210px;
+  max-width: 1210px;
+  min-height: 520px;
+  max-height: 520px;
+  margin-left: 20px;
   display: flex;
-  flex-direction: column; /* Organize os elementos verticalmente */
-  justify-content: center;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  width: 90%; /* Ajuste para tela menor */
-  background-color: #acacac4c; /* Fundo escuro */
-  border: 2px solid #2ffbfe; /* Borda azul */
-  transform: translate(-50%, -50%);
-  border-radius: 8px; /* Arredondamento das bordas */
-  box-shadow: 5px 5px 80px #006395; /* Sombra */
-  opacity: 100;
-  padding: 20px; /* Espaçamento interno */
-}
-
-.form-content-adminpanel {
-  display: flex;
-  flex-direction: column; /* Organize os elementos verticalmente */
-  width: 100%;
-  padding: 10px 20px;
+  flex-direction: column;
   align-items: center;
-  flex-wrap: wrap;
+  padding: 0;
+  margin-top: 40px;
 }
+
+
+
 
 .user-table {
-  width: 100%;
+  width: 90%;
   border-collapse: collapse;
   margin-top: 20px;
-  background-color: #1e2737;
-  color: #2ffbfe;
+  color: var(--main-fonts-color);
   border-radius: 8px; /* Arredonda as bordas da tabela */
+  
+}
+
+.user-item{
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+  border-bottom: 2px solid var(--main-fonts-color);
 }
 
 .user-table th, .user-table td {
-  padding: 10px;
+  padding: 5px;
   text-align: left;
-  border-bottom: 1px solid #2ffbfe; /* Linha de separação azul */
+  
+  font-family: var(--third-font-family);
+  font-size: 1rem;
+
 }
 
-.user-table th {
-  background-color: #1e2737;
-  color: #2ffbfe;
-  font-weight: bold;
-}
 
 .user-table tr:hover {
-  background-color: #23304d; /* Cor de destaque ao passar o mouse */
+  background-color: var(--gray-background) /* Cor de destaque ao passar o mouse */
 }
 
 .user-table button {

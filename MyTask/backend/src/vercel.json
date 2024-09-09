@@ -1,15 +1,16 @@
 {
     "version": 2,
+    "name": "MyTask-Backend", 
     "builds": [
-        {
-            "src": "./src/app.js",
-            "use": "@vercel/node"
-        }
+      {
+        "src": "backend/app.js", 
+        "use": "@vercel/node" 
+      }
     ],
     "routes": [
-        {
-            "src": "/(.*)",
-            "dest": "/"
-        }
+      {
+        "src": "/(.*)",
+        "dest": "backend/app.js" 
+      }
     ]
-}
+  }

@@ -3,13 +3,13 @@
 
 .colors {
     --main-background: #a9a9a965;
+    --gray-background: #a9a9a965;
     --main-fonts-color: #111111;
     --second-fonts-color: #2d2d2db8;
     --blue-fonts-color: #101bb8;
     --blue-hover-fonts-color: #525dff;
     --red-fonts-color: #d01313;
     --red-hover-fonts-color: #c20000;
-    --main-decor-color: #20afb1;
     --main-header-background: #00868dc8;
     --main-blue-border-shadow: #6ac3c6;
     --main-font-family: "Patrick Hand SC", cursive;
@@ -19,6 +19,13 @@
     --fifth-font-family: "Sue Ellen Francisco", cursive;
     --sixth-font-family: "Square Peg", cursive;
     --seventh-font-family: "Just Another Hand", cursive;
+
+	/* Cores */
+	--green-color: #4CAF50;
+	--red-color: #f44336;
+	--blue2-color: #1f9398;
+	--main-decor-color: #20afb1;
+
 }
 
 

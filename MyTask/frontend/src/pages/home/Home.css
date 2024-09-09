@@ -10,10 +10,10 @@
   max-height: 520px;
   overflow-y: hidden; 
   border-radius: 3px; 
-  padding: 10px;
+  padding: 20px;
   margin-top: 38px; 
   margin-left: 22px;
-  padding-top: 0px; 
+  padding-top: 10px; 
   margin-bottom: 0px;
   padding-bottom: 0px;
 }
@@ -137,11 +137,13 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  font-family: var(--third-font-family);
   color: var(--main-fonts-color);
+  font-size: 1rem;
   height: 50px;
   cursor: pointer; 
   text-decoration:none;
-  border-bottom: 1px solid var(--main-fonts-color);
+  border-bottom: 2px solid var(--main-fonts-color);
   background-color: transparent;
 }
 
