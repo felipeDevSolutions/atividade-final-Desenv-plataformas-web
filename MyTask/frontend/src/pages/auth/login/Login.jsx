@@ -20,7 +20,7 @@ const Login = () => {
     setIsLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:5000/api/login', { email, password }); // URL correta
+      const response = await axios.post('https://atividade-final-desenv-plataformas-1lfnfap2v.vercel.app/api/login', { email, password }); // URL correta
 
       const { token, user } = response.data;
 

@@ -29,7 +29,7 @@ const Signup = () => {
 
     setIsLoading(true);
 
-    axios.post('http://localhost:5000/api/signup', { 
+    axios.post('https://atividade-final-desenv-plataformas-1lfnfap2v.vercel.app/api/signup', { 
       email: emailSignup,
       password: passwordSignup
     })
