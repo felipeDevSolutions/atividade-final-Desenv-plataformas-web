@@ -1,7 +1,6 @@
 import React, { useContext, useState } from "react";
 import axios from 'axios';
 import Layout from '../../../components/layout/Layout';
-import "../login/login.css";
 import "../form.css";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../context/AuthContext";
@@ -20,7 +19,7 @@ const Login = () => {
     setIsLoading(true);
 
     try {
-      const response = await axios.post('https://atividade-final-desenv-plataformas-1lfnfap2v.vercel.app/api/login', { email, password }); // URL correta
+      const response = await axios.post('https://mytask-ze7d.onrender.com/api/login', { email, password }); // URL correta
 
       const { token, user } = response.data;
 

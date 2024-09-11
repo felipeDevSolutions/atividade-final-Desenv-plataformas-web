@@ -14,11 +14,11 @@ export const AuthContextProvider = ({ children }) => {
 
   // Validação do token no primeiro carregamento da página
   useEffect(() => {
-    const token = localStorage.getItem("token"); 
+    const token = localStorage.getItem("token");
 
     const validateToken = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/validate', {
+        const response = await fetch('https://mytask-ze7d.onrender.com/api/validate', {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`,
@@ -30,10 +30,10 @@ export const AuthContextProvider = ({ children }) => {
         }
 
         const responseData = await response.json();
-        dispatch({ type: "LOGIN", payload: responseData.user }); 
+        dispatch({ type: "LOGIN", payload: responseData.user });
       } catch (err) {
         console.error('Erro ao validar token:', err);
-        dispatch({ type: "LOGOUT" }); 
+        dispatch({ type: "LOGOUT" });
       } finally {
         dispatch({ type: "SET_LOADING", payload: false });
       }
@@ -44,30 +44,30 @@ export const AuthContextProvider = ({ children }) => {
     } else {
       dispatch({ type: "SET_LOADING", payload: false });
     }
-  }, []); 
+  }, []);
 
   // Atualiza o token no localStorage quando ele expira ou está prestes a expirar
   useEffect(() => {
     const token = localStorage.getItem("token");
 
     if (token) {
-      const expirationTime = parseInt(localStorage.getItem("tokenExpiration")); 
+      const expirationTime = parseInt(localStorage.getItem("tokenExpiration"));
       const now = new Date().getTime();
 
       if (expirationTime && now > expirationTime) {
         // Token expirou, faça o logout
         dispatch({ type: "LOGOUT" });
-      } else if (expirationTime && now + 1000 * 60 * 5 > expirationTime) { 
-        // Atualize o token
+      } else if (expirationTime && now + 1000 * 60 * 150 > expirationTime) { // 2h30min após a emissão do token
+        // Atualize o token 30 minutos antes de expirar
         const updateToken = async () => {
           try {
-            // Chame uma função na API para renovar o token
-            const response = await fetch('http://localhost:5000/api/refreshToken', {
+            // Chame a rota no backend para renovar o token
+            const response = await fetch('https://mytask-ze7d.onrender.com/api/refreshToken', {
               method: 'POST',
               headers: {
-                Authorization: `Bearer ${token}` 
+                Authorization: `Bearer ${token}`
               }
-            }); 
+            });
             if (!response.ok) {
               throw new Error('Erro ao atualizar token');
             }
@@ -77,7 +77,7 @@ export const AuthContextProvider = ({ children }) => {
             localStorage.setItem("tokenExpiration", newTokenData.expirationTime);
           } catch (err) {
             console.error('Erro ao atualizar token:', err);
-            dispatch({ type: "LOGOUT" }); 
+            dispatch({ type: "LOGOUT" });
           }
         };
 

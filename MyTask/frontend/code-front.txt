@@ -26,13 +26,11 @@ FRONTEND:
  ┃ ┃ ┃ ┃ ┣ 📜EditUser.css
  ┃ ┃ ┃ ┃ ┗ 📜EditUser.jsx
  ┃ ┃ ┃ ┣ 📂login
- ┃ ┃ ┃ ┃ ┣ 📜login.css
  ┃ ┃ ┃ ┃ ┗ 📜Login.jsx
  ┃ ┃ ┃ ┣ 📂resetPassword
  ┃ ┃ ┃ ┃ ┣ 📜ForgotPassword.jsx
  ┃ ┃ ┃ ┃ ┗ 📜resetPassword.jsx
  ┃ ┃ ┃ ┣ 📂signup
- ┃ ┃ ┃ ┃ ┣ 📜signup.css
  ┃ ┃ ┃ ┃ ┗ 📜signup.jsx
  ┃ ┃ ┃ ┣ 📂verifyEmail
  ┃ ┃ ┃ ┃ ┗ 📜VerifyEmail.jsx
@@ -41,11 +39,12 @@ FRONTEND:
  ┃ ┃ ┣ 📂home
  ┃ ┃ ┃ ┣ 📜Home.css
  ┃ ┃ ┃ ┣ 📜Home.jsx
- ┃ ┃ ┃ ┣ 📜home.scss
- ┃ ┃ ┃ ┗ 📜main.css
  ┃ ┃ ┣ 📂landing
  ┃ ┃ ┃ ┣ 📜LandingPage.css
  ┃ ┃ ┃ ┗ 📜LandingPage.jsx
+ ┃ ┃ ┣ 📂ProjectPage
+ ┃ ┃ ┃ ┣ 📜Project.css
+ ┃ ┃ ┃ ┗ 📜Project.jsx
  ┃ ┃ ┗ 📂utils
  ┃ ┃ ┃ ┣ 📜terms.css
  ┃ ┃ ┃ ┗ 📜terms.jsx
@@ -54,8 +53,11 @@ FRONTEND:
  ┃ ┃ ┣ 📜icons8-task-48.png
  ┃ ┃ ┣ 📜icons8-task-96.png
  ┃ ┃ ┣ 📜icons8-task.gif
+ ┃ ┃ ┣ 📜Leonardo_Phoenix_A_clean_and_dustfree_horizontal_whiteboard_fi_1.jpg
  ┃ ┃ ┣ 📜logo.png
- ┃ ┃ ┗ 📜qmentum.png
+ ┃ ┃ ┣ 📜Quadro 1.png
+ ┃ ┃ ┣ 📜Quadro 2.png
+ ┃ ┃ ┣ 📜Quadro Original.png
  ┃ ┣ 📜App.js
  ┃ ┗ 📜index.js
  ┣ 📂style
@@ -66,8 +68,8 @@ FRONTEND:
  ┗ 📜package.json
  
 
- index.js:
- import React from 'react';
+index.js:
+import React from 'react';
 import { createRoot } from 'react-dom/client';
 import 'bootstrap/dist/css/bootstrap.min.css'; 
 import App from './App';
@@ -96,7 +98,15 @@ index.html:
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- <link href="../style/style.css" rel="stylesheet" type="text/css" /> -->
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand+SC&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Brush+Script&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Shantell+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Just+Me+Again+Down+Here&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Sue+Ellen+Francisco&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Square+Peg&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Just+Another+Hand&display=swap" rel="stylesheet">
   <link rel="icon" href="https://img.icons8.com/?size=100&id=tqnBJvTRxC3E&format=png&color=000000">
   <!-- https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Repl.it_logo.svg/220px-Repl.it_logo.png -->
   <title>MyTask - Grupo 50</title>
@@ -106,6 +116,9 @@ index.html:
   <div id="root"></div>
 </body>
 </html>
+
+
+
 
 
 
@@ -120,13 +133,14 @@ import LandingPage from './pages/landing/LandingPage';
 import Login from './pages/auth/login/Login';
 import Signup from './pages/auth/signup/signup';
 import Home from './pages/home/Home'; 
+import Project from './pages/ProjectPage/Project';
 import AdminPanel from './pages/Admin/AdminPanel';
 import EditUser from './pages/auth/EditUser/EditUser';
 import { AuthContext } from './context/AuthContext';
 import ForgotPassword from './pages/auth/resetPassword/ForgotPassword';
-import ResetPassword from './pages/auth/resetPassword/resetPassword';
 import Loading from './components/Loading/Loading';
 import Terms from './pages/utils/terms'; 
+
 
 const RequireAuth = ({ children }) => {
   const { currentUser } = useContext(AuthContext);
@@ -154,9 +168,9 @@ function App() {
             <Route path="/signup" element={currentUser ? <Navigate to="/home" /> : <Signup />} />
             <Route path="/forgot-password" element={<ForgotPassword />} /> 
             <Route path="/home" element={<RequireAuth><Home /></RequireAuth>} />
+            <Route path="/project/:projectId" element={<RequireAuth><Project /></RequireAuth>} />
             <Route path="/admin" element={<RequireAuth><AdminPanel /></RequireAuth>} />
             <Route path="/users/:userId/edit" element={<RequireAuth><EditUser /></RequireAuth>} />
-            <Route path="/reset-password/:oobCode" element={<ResetPassword />} />
             <Route path="/terms" element={<Terms />} />
           </Routes>
         </Router>
@@ -189,11 +203,11 @@ export const AuthContextProvider = ({ children }) => {
 
   // Validação do token no primeiro carregamento da página
   useEffect(() => {
-    const token = localStorage.getItem("token"); 
+    const token = localStorage.getItem("token");
 
     const validateToken = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/validate', {
+        const response = await fetch('https://mytask-ze7d.onrender.com/api/validate', {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`,
@@ -205,10 +219,10 @@ export const AuthContextProvider = ({ children }) => {
         }
 
         const responseData = await response.json();
-        dispatch({ type: "LOGIN", payload: responseData.user }); 
+        dispatch({ type: "LOGIN", payload: responseData.user });
       } catch (err) {
         console.error('Erro ao validar token:', err);
-        dispatch({ type: "LOGOUT" }); 
+        dispatch({ type: "LOGOUT" });
       } finally {
         dispatch({ type: "SET_LOADING", payload: false });
       }
@@ -219,30 +233,30 @@ export const AuthContextProvider = ({ children }) => {
     } else {
       dispatch({ type: "SET_LOADING", payload: false });
     }
-  }, []); 
+  }, []);
 
   // Atualiza o token no localStorage quando ele expira ou está prestes a expirar
   useEffect(() => {
     const token = localStorage.getItem("token");
 
     if (token) {
-      const expirationTime = parseInt(localStorage.getItem("tokenExpiration")); 
+      const expirationTime = parseInt(localStorage.getItem("tokenExpiration"));
       const now = new Date().getTime();
 
       if (expirationTime && now > expirationTime) {
         // Token expirou, faça o logout
         dispatch({ type: "LOGOUT" });
-      } else if (expirationTime && now + 1000 * 60 * 5 > expirationTime) { 
-        // Atualize o token
+      } else if (expirationTime && now + 1000 * 60 * 150 > expirationTime) { // 2h30min após a emissão do token
+        // Atualize o token 30 minutos antes de expirar
         const updateToken = async () => {
           try {
-            // Chame uma função na API para renovar o token
-            const response = await fetch('http://localhost:5000/api/refreshToken', {
+            // Chame a rota no backend para renovar o token
+            const response = await fetch('https://mytask-ze7d.onrender.com/api/refreshToken', {
               method: 'POST',
               headers: {
-                Authorization: `Bearer ${token}` 
+                Authorization: `Bearer ${token}`
               }
-            }); 
+            });
             if (!response.ok) {
               throw new Error('Erro ao atualizar token');
             }
@@ -252,7 +266,7 @@ export const AuthContextProvider = ({ children }) => {
             localStorage.setItem("tokenExpiration", newTokenData.expirationTime);
           } catch (err) {
             console.error('Erro ao atualizar token:', err);
-            dispatch({ type: "LOGOUT" }); 
+            dispatch({ type: "LOGOUT" });
           }
         };
 
@@ -267,7 +281,6 @@ export const AuthContextProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
-
 
 
 ==============================================================================================================
@@ -326,14 +339,14 @@ export default Loading;
 
 ===================================================================================================
 
-
+Loading.css:
 .fundo-loading {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: #0c121cb4; /* Cor do fundo semi-transparente */
+    background: transparent; /* Cor do fundo semi-transparente */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -501,14 +514,36 @@ export default Layout;
 
 
 Layout.css:
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
+
+
+
+
 
 .colors {
-    --main-background: #0f1013;
-    --main-fonts-color: #fff;
-    --main-decor-color: #20afb1;
-    --main-header-background: #0b3046;
-    --main-font-family: 'Poppins', sans-serif;
+    --main-background: #a9a9a965;
+    --gray-background: #a9a9a965;
+    --main-fonts-color: #111111;
+    --second-fonts-color: #2d2d2db8;
+    --blue-fonts-color: #101bb8;
+    --blue-hover-fonts-color: #525dff;
+    --red-fonts-color: #d01313;
+    --red-hover-fonts-color: #c20000;
+    --main-header-background: #00868dc8;
+    --main-blue-border-shadow: #6ac3c6;
+    --main-font-family: "Patrick Hand SC", cursive;
+    --second-font-family: "Nanum Brush Script", cursive;
+    --third-font-family: "Shantell Sans", cursive;
+    --fourth-font-family: "Just Me Again Down Here", cursive;
+    --fifth-font-family: "Sue Ellen Francisco", cursive;
+    --sixth-font-family: "Square Peg", cursive;
+    --seventh-font-family: "Just Another Hand", cursive;
+
+	/* Cores */
+	--green-color: #4CAF50;
+	--red-color: #f44336;
+	--blue2-color: #1f9398;
+	--main-decor-color: #20afb1;
+
 }
 
 
@@ -554,6 +589,8 @@ main{
 	transition: 0.3s;
 	z-index: 5;
     opacity: 0;
+	margin: 0;
+	padding: 0;
 }
 
 
@@ -565,9 +602,6 @@ main{
 	opacity: 0.8;
 	background: var(--main-header-background);
 }
-
-
-
 
 .nav-bar{
 	list-style:none;
@@ -608,16 +642,16 @@ a.nav-link{
 }
 
 #home .filter{
-	background: url('https://images.unsplash.com/photo-1544099858-75feeb57f01b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80') no-repeat;
-	background-size: cover;
+	background: url('../../static/Quadro\ 1.png') no-repeat;
+	background-size:cover;
 	background-position:center;
-    position: absolute;
+    position: fixed;
     top: 0px;
 	height: 100%;
     bottom: 0;
     left: 0px;
     right: 0;
-	opacity:.20;
+	opacity:100;
 }  
 
 .intro {
@@ -625,7 +659,7 @@ a.nav-link{
     color: var(--main-fonts-color);
 	z-index: 1;
 	margin: auto;
-	padding: 20px;
+	padding: 0px;
 }
 
 .intro  p{
@@ -642,7 +676,6 @@ h3{
 	font-style: normal;
 	font-size: 70px;
 	color: var(--main-fonts-color);
-	text-shadow: 0px 0px 40px var(--main-decor-color);
 }
 
 h4{
@@ -651,8 +684,7 @@ h4{
     font-family: var(--main-font-family);
 	font-style: normal;
 	font-size: 40px;
-	color: var(--main-fonts-color);
-	text-shadow: 0px 0px 40px var(--main-decor-color);
+	color: var(--blue-fonts-color);
 }
 
 
@@ -688,20 +720,21 @@ h4{
 
 /* Estilo moderno para a barra de rolagem */
 ::-webkit-scrollbar {
-	width: 10px;
+	width: 5px;
+	height: 6px;
   }
   
   ::-webkit-scrollbar-track {
-	background: #111822; /* Cor de fundo da barra de rolagem */
+	background: #888; /* Cor de fundo da barra de rolagem */
   }
   
   ::-webkit-scrollbar-thumb {
-	background: #888; /* Cor do botão da barra de rolagem */
+	background: #26b7be; /* Cor do botão da barra de rolagem */
 	border-radius: 10px; /* Arredonda as bordas do botão */
   }
   
 ::-webkit-scrollbar-thumb:hover {
-background: #555; /* Cor do botão ao passar o mouse */
+background: #32d7df; /* Cor do botão ao passar o mouse */
 }
 
   
@@ -742,21 +775,21 @@ toasts.css:
     background-color: #2196F3; /* Azul do form.css */
     color: white;
     border: 2px solid #2196F3; /* Ajuste a borda conforme necessário */
-    border-radius: 5px; /* Ajuste o raio da borda conforme necessário */
+    border-radius: 5px; /* Ajusta o raio da borda conforme necessário */
   }
   
   .toast-error {
     background-color: #f44336; /* Vermelho do form.css */
     color: white;
-    border: 2px solid #f44336; /* Ajuste a borda conforme necessário */
-    border-radius: 5px; /* Ajuste o raio da borda conforme necessário */
+    border: 2px solid #f44336; /* Ajusta a borda conforme necessário */
+    border-radius: 5px; /* Ajusta o raio da borda conforme necessário */
   }
   
   .toast-warning {
     background-color: #ffeb3b; /* Amarelo para avisos */
     color: black;
-    border: 2px solid #ffeb3b; /* Ajuste a borda conforme necessário */
-    border-radius: 5px; /* Ajuste o raio da borda conforme necessário */
+    border: 2px solid #ffeb3b; /* Ajusta a borda conforme necessário */
+    border-radius: 5px; /* Ajusta o raio da borda conforme necessário */
   }
   
   /* Estilos adicionais para o conteúdo do Toast */
@@ -783,7 +816,6 @@ Login.jsx:
 import React, { useContext, useState } from "react";
 import axios from 'axios';
 import Layout from '../../../components/layout/Layout';
-import "../login/login.css";
 import "../form.css";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../context/AuthContext";
@@ -802,7 +834,7 @@ const Login = () => {
     setIsLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:5000/api/login', { email, password }); // URL correta
+      const response = await axios.post('https://mytask-ze7d.onrender.com/api/login', { email, password }); // URL correta
 
       const { token, user } = response.data;
 
@@ -871,17 +903,7 @@ const Login = () => {
 export default Login;
 
 
-
 ===========================================================================================
-
-
-login.css:
-/* login.css */
-/* Estilos específicos para a página de login */
-
-
-
-==============================================================================================
 
 
 signup.jsx:
@@ -889,7 +911,6 @@ import { useState } from "react";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import Layout from '../../../components/layout/Layout';
-import "../signup/signup";
 import "../form.css";
 import Loading from '../../../components/Loading/Loading';
 import Alerts, { showSuccessToast, showErrorToast } from '../../../components/layout/Alerts';
@@ -916,7 +937,7 @@ const Signup = () => {
 
     setIsLoading(true);
 
-    axios.post('http://localhost:5000/api/signup', { 
+    axios.post('https://mytask-ze7d.onrender.com/api/signup', { 
       email: emailSignup,
       password: passwordSignup
     })
@@ -1042,7 +1063,7 @@ const ForgotPassword = () => {
     setIsLoading(true);
 
     try {
-      await axios.post('http://localhost:5000/api/forgot-password', { email });
+      await axios.post('https://mytask-ze7d.onrender.com/api/forgot-password', { email });
       setIsLoading(false);
       showSuccessToast('Email de redefinição de senha enviado com sucesso!');
       navigate('/login');
@@ -1085,13 +1106,6 @@ const ForgotPassword = () => {
 };
 
 export default ForgotPassword;
-
-
-
-=======================================================================================================
-
-
-resetPassword.jsx:
 
 
 
@@ -1185,12 +1199,12 @@ export default VerifyEmail;
 
 
 form.css:
-/* form.css */
+/* form.css - CSS das páginas Login e Signup*/
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: var(--main-font-family);
 }
 
 body {
@@ -1202,33 +1216,36 @@ body {
     display: flex; /* Altere a exibição para flex */
     justify-content: center;
     position: fixed;
-    top: 53%;
+    top: 50%;
     left: 50%;
     max-width: 720px;
-    background-color: transparent;
-    border: 2px solid #2ffbfe;
     transform: translate(-50%, -50%);
-    border-radius: 8px;
-    box-shadow: 5px 5px 80px #006395;
+    box-shadow: 2px 2px 20px #8298a97b;
     opacity: 100;
+
+    backdrop-filter: blur(8px) saturate(159%);
+    -webkit-backdrop-filter: blur(10px) saturate(159%);
+    background-color: rgba(255, 255, 255, 0.16);
+    border-radius: 12px;
+    border: 1px solid rgba(173, 186, 205, 0.282);
 }
 
 .form-popup .form-box {
     display: flex;
-    
 }
 
 .form-box h2 {
     justify-content: baseline;
     text-align: center;
     margin-top: 5px;
-    color: #fff;
+    color: var(--main-fonts-color);
 }
 
 .form-box .form-content {
     display: flex;
     flex-direction: column;
     width: 100%;
+    height: 78vh;
     padding: 10px 20px;
     align-items: center;
 }
@@ -1236,8 +1253,10 @@ body {
 form .input-field {
     height: 45px;
     width: 100%;
-    margin-top: 15px;
+    margin-top: 0px;
+    margin-bottom: 20px;
     position: relative;
+    font-family: var(--third-font-family);
 }
 
 form .input-field-terms{
@@ -1246,15 +1265,21 @@ form .input-field-terms{
     align-items: center;
     height: 45px;
     width: 100%;
-    margin-top: 15px;
     position: relative;
     padding: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+form .input-field-terms button{
+    margin: 0;
+    padding: 0;
 }
 
 form .input-field-terms label{
     display: flex;
     gap: 10px;
-    font-size: small;
+    font-size:medium;
 }
 
 form .input-field-redefinir {
@@ -1274,39 +1299,40 @@ form .input-field-redefinir input {
     outline-style: none;
     border-style: none;
     border-radius: 3px;
-    background-color: #1e27378c;
-    color: #2dfafd;
+    background-color: #1e273725;
+    color: var(--main-fonts-color);
 }
 
 .input-field label {
     position: absolute;
-    top: 12px; /* Posição inicial da label */
+    top: 8px; /* Posição inicial da label */
     left: 15px;
-    color: #717171; /* Cor da label */
+    color: var(--main-fonts-color);
     pointer-events: none; 
     transition: 0.2s ease; /* Transição suave */
-    font-size: 1rem; /* Tamanho da fonte da label */
+    font-size: 1.2rem; /* Tamanho da fonte da label */
     margin-bottom: 5px; /* Adiciona um espaçamento maior para a label dos termos */
 }
 
 .input-field input:focus {
-    border: 2px solid #2ffbfe;
-    border-color: #2ffbfe;
+    border: 2px solid;
+    border-color: var(--main-blue-border-shadow)
 }
 
 .input-field input:is(:focus, :valid) {
     padding: 16px 15px 0;
-    border-color: #2ffbfe;
+    border-color: var(--main-blue-border-shadow)
     
 }
 
 .input-field input:is(:focus, :valid) ~ label {
-    font-size: 0.75rem; /* Tamanho da fonte da label em foco */
-    top: 5px; /* Posição da label em foco */
+    font-size: 0.95rem; /* Tamanho da fonte da label em foco */
+    top: 2px; /* Posição da label em foco */
+    color: var(--second-fonts-color);
 }
 
 .form-box a {
-    color: #ffffff;
+    color: var(--blue-fonts-color);
     text-decoration: none;
 }
 
@@ -1318,7 +1344,7 @@ form .input-field-redefinir input {
     display: inline-flex;
     margin-top: 14px;
     font-size: 0.95rem;
-    color: #fff;
+    color: var(--main-fonts-color);
 }
 
 .input-fieldError {
@@ -1335,7 +1361,7 @@ form button {
     font-weight: 500;
     padding: 14px 0;
     border-radius: 3px;
-    margin: 25px 0;
+    margin: 0;
     color: #fff;
     cursor: pointer;
     background-color: #1f9398;
@@ -1348,7 +1374,7 @@ form button:hover {
 
 .form-box .bottom-link {
     text-align: center;
-    color: #fff;
+    color: var(--main-fonts-color);
     font-size: 0.95rem;
     margin-top: 1rem;
     display: flex;
@@ -1357,7 +1383,7 @@ form button:hover {
   }
   
   .form-box .bottom-link a {
-    color: #2ffbfe; /* Cor do link */
+    color: var(--blue-fonts-color);
     text-decoration: none;
     margin-left: 0.5rem; /* Espaçamento entre o texto e o link */
     font-weight: bold; /* Estilo do link */
@@ -1366,12 +1392,12 @@ form button:hover {
   
   .form-box .bottom-link a:hover {
     text-decoration: underline;
-    color: #fff; /* Cor do link ao passar o mouse */
+    color: var(--blue-hover-fonts-color);
   }
   
   .form-box .forgot-password {
     text-align: center;
-    color: #fff;
+    color: var(--main-fonts-color);
     font-size: 0.95rem;
     margin-top: 1rem;
     display: flex;
@@ -1381,7 +1407,7 @@ form button:hover {
 
   .form-box .forgot-password-message {
     text-align: center;
-    color: #fff;
+    color: var(--red-fonts-color);
     font-size: 0.95rem;
     margin-top: 1rem;
     display: flex;
@@ -1390,7 +1416,7 @@ form button:hover {
   }
   
   .form-box .forgot-password a {
-    color: #2ffbfe; /* Cor do link */
+    color: var(--red-fonts-color);
     text-decoration: none;
     margin-left: 0.5rem; /* Espaçamento entre o texto e o link */
     font-weight: bold; /* Estilo do link */
@@ -1399,7 +1425,7 @@ form button:hover {
   
   .form-box .forgot-password a:hover {
     text-decoration: underline;
-    color: #fff; /* Cor do link ao passar o mouse */
+    color: var(--red-hover-fonts-color);
   }
 
 .input-field input[type="checkbox"] {
@@ -1430,11 +1456,115 @@ form button:hover {
         box-shadow: 5px 5px 80px #006395;
         opacity: 100;
     }
-    
-
-
    
 }
+
+
+===========================================================================================
+
+
+EditUser.jsx:
+import React, { useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import Layout from '../../../components/layout/Layout';
+import Loading from '../../../components/Loading/Loading';
+import Alerts, { showSuccessToast, showErrorToast } from '../../../components/layout/Alerts';
+import "../form.css";
+
+function EditUser() {
+  const { userId } = useParams();
+  const navigate = useNavigate();
+  const [oldPassword, setOldPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (newPassword !== confirmPassword) {
+      showErrorToast("As senhas não estão iguais.");
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const token = localStorage.getItem('token');
+
+      await axios.put(`https://mytask-ze7d.onrender.com/api/users/${userId}/password`, { 
+        oldPassword,
+        newPassword,
+        confirmPassword
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      
+
+      showSuccessToast('Senha atualizada com sucesso!');
+      console.log("Senha atualizada com sucesso!")
+      navigate('/home');
+    } catch (error) {
+      console.error('Erro ao atualizar senha:', error);
+      showErrorToast('Erro ao atualizar senha!');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <Layout>
+      <Alerts />
+      {isLoading && <Loading />}
+      <div className="form-popup"> {/* Classe do formulário */}
+        <div className="form-box">
+          <div className="form-content">
+            <h2>Atualizar Senha</h2>
+            <form onSubmit={handleSubmit} method="post"> {/* Formulário */}
+              <div className="input-field"> {/* Campo para a senha antiga */}
+                <input
+                  type="password"
+                  id="oldPassword"
+                  value={oldPassword}
+                  onChange={(e) => setOldPassword(e.target.value)}
+                  required
+                />
+                <label htmlFor="oldPassword">Senha Antiga</label>
+              </div>
+              <div className="input-field"> {/* Campo para a nova senha */}
+                <input
+                  type="password"
+                  id="newPassword"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  required
+                />
+                <label htmlFor="newPassword">Nova Senha</label>
+              </div>
+              <div className="input-field"> {/* Campo para confirmar a nova senha */}
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                />
+                <label htmlFor="confirmPassword">Confirmar Nova Senha</label>
+              </div>
+              <button type="submit">Atualizar</button> {/* Botão para enviar o formulário */}
+            </form>
+          </div>
+        </div>
+      </div>
+    </Layout>
+  );
+}
+
+export default EditUser;
 
 
 ===========================================================================================
@@ -1516,43 +1646,11 @@ export default LandingPage;
 
 
 LandingPage.css:
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
-
-.colors {
-    --main-background: #0f1013;
-    --main-fonts-color: #fff;
-    --main-decor-color: #0091ffde;
-    --main-header-background: #003b93;
-    --main-font-family: 'Poppins', sans-serif;
-}
 
 
-*{
-    margin: 0;
-    padding: 0;
-    scroll-behavior: smooth;
-}
-
-.container {
-    width: 100%;
-    max-width: 100%;
-    margin: 0 auto;
-    padding: 0; /* Adicionado padding para garantir espaço nas laterais */
-}
-
-
-
-main{
-    display: flex;
-	width: 100%;
-	height: 100%;
-    margin: 0;
-    padding: 0;
-	background: var(--main-background);
-}
 
 /*────────────────── 
-       header
+       header-landing
 ──────────────────*/
 
 .header-landing{
@@ -1570,7 +1668,6 @@ main{
     
 }
 
-
 .nav-show-landing{
 	opacity: 0;
 }
@@ -1579,8 +1676,6 @@ main{
 	opacity: 0.8;
 	background: var(--main-header-background);
 }
-
-
 
 
 .nav-bar-landing{
@@ -1609,63 +1704,6 @@ a.nav-link-landing{
     background: var(--main-decor-color);
 }
 
-/*──────────────────
-       home
-──────────────────*/
-
-#home{ 	
-    width: 100%;
-	height: 100vh;
-	color: var(--main-fonts-color);
-	display: flex;
-	align-items: center;
-}
-
-#home .filter{
-	background: url('https://images.unsplash.com/photo-1544099858-75feeb57f01b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80') no-repeat;
-	background-size: cover;
-    position: absolute;
-    top: 0px;
-    bottom: 0;
-    left: 0px;
-    right: 0;
-	opacity:.20;
-}  
-
-.intro {
-	text-align:center;
-    color: var(--main-fonts-color);
-	z-index: 1;
-	margin: auto;
-	padding: 20px;
-}
-
-.intro  p{
-    margin: 5px;
-	font-size:1.2rem;
-	font-family: var(--main-font-family);
-	text-align:center;
-}
-
-h3{
-	padding-bottom: 15px;
-    letter-spacing: normal;
-    font-family: var(--main-font-family);
-	font-style: normal;
-	font-size: 70px;
-	color: var(--main-fonts-color);
-	text-shadow: 0px 0px 40px var(--main-decor-color);
-}
-
-h4{
-	padding-bottom: 15px;
-    letter-spacing: normal;
-    font-family: var(--main-font-family);
-	font-style: normal;
-	font-size: 40px;
-	color: var(--main-fonts-color);
-	text-shadow: 0px 0px 40px var(--main-decor-color);
-}
 
 
 /*──────────────────
@@ -1701,8 +1739,237 @@ h4{
 ===========================================================================================
 
 
+AdminPanel.jsx:
+import React, { useState, useEffect, useContext } from 'react';
+import axios from 'axios';
+import Layout from '../../components/layout/Layout';
+import Loading from '../../components/Loading/Loading';
+import { AuthContext } from '../../context/AuthContext';
+import { useNavigate, Navigate } from 'react-router-dom';
+import './AdminPanel.css';
+import Alerts, { showSuccessToast, showErrorToast } from '../../components/layout/Alerts';
+
+const AdminPanel = () => {
+  const [users, setUsers] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const { currentUser, dispatch } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setIsLoading(true);
+    const fetchUsers = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await axios.get('https://mytask-ze7d.onrender.com/api/users', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setUsers(response.data);
+      } catch (err) {
+        setError(err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchUsers();
+  }, []);
+
+  const handleDeleteUser = async (userId) => {
+    setIsLoading(true);
+    try {
+      const token = localStorage.getItem('token');
+      await axios.delete(`https://mytask-ze7d.onrender.com/api/users/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setUsers(users.filter((user) => user.id !== userId));
+      showSuccessToast('Usuário excluído!');
+
+      // Faz logout APENAS se o usuário excluído for o usuário logado
+      if (userId === currentUser.id) {
+        dispatch({ type: "LOGOUT" });
+        navigate("/login");
+      }
+
+    } catch (err) {
+      showErrorToast('Erro ao excluir usuário!');
+      setError(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Verifica se o usuário está logado
+  if (!currentUser) {
+    return <Navigate to="/login" />;
+  }
+
+  return (
+    <Layout>
+      <Alerts/>
+      {isLoading && <Loading />}
+        <div className="form-content-adminpanel">
+          <h1>Gerenciamento de Usuários</h1>
+          {isLoading ? (
+            <p>Carregando...</p>
+          ) : error ? (
+            <p>Erro ao carregar usuários: {error.message}</p>
+          ) : (
+            <table className="user-table">
+              <thead>
+                
+              </thead>
+              <tbody>
+                {users.map((user) => (
+                  <tr key={user.id} className='user-item'>
+                    <td>{user.email}</td>
+                    <td>
+                      <button className="btn btn-edit" onClick={() => navigate(`/users/${user.id}/edit`)}>
+                        Editar
+                      </button>
+                      <button className="btn btn-delete" onClick={() => handleDeleteUser(user.id)}>
+                        Excluir
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
+    </Layout>
+  );
+};
+
+export default AdminPanel;
+
+
+====================================================================================================
+
+
+AdminPanel.css:
+.form-content-adminpanel{
+
+  width: 95vw;
+  min-width: 1210px;
+  max-width: 1210px;
+  min-height: 520px;
+  max-height: 520px;
+  margin-left: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0;
+  margin-top: 40px;
+}
+
+
+
+
+.user-table {
+  width: 90%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  color: var(--main-fonts-color);
+  border-radius: 8px; /* Arredonda as bordas da tabela */
+  
+}
+
+.user-item{
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+  border-bottom: 2px solid var(--main-fonts-color);
+}
+
+.user-table th, .user-table td {
+  padding: 5px;
+  text-align: left;
+  
+  font-family: var(--third-font-family);
+  font-size: 1rem;
+
+}
+
+
+.user-table tr:hover {
+  background-color: var(--gray-background) /* Cor de destaque ao passar o mouse */
+}
+
+.user-table button {
+  padding: 5px 10px;
+  margin: 0 5px;
+  border: none;
+  border-radius: 5px;
+  background-color: #1f9398; /* Azul padrão */
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.2s ease; /* Transição suave da cor */
+  display: inline-block; /* Faz com que os botões fiquem lado a lado */
+  font-size: 14px; /* Ajuste o tamanho da fonte */
+}
+
+.user-table .btn-edit {
+  background-color: #1f9398; /* Azul padrão */
+}
+
+.user-table .btn-edit:hover {
+  background-color: #26b7be; /* Azul mais escuro */
+  color: #fff;
+}
+
+.user-table .btn-delete {
+  background-color: #8d1515; /* Vermelho */
+}
+
+.user-table .btn-delete:hover {
+  background-color: #b31a1a; /* Vermelho mais escuro */
+  color: #fff;
+}
+
+/* Responsividade (Media Queries) */
+@media (max-width: 600px) {
+  .form-box-adminpanel {
+    display: flex;
+    align-items: center;
+    width: 90%; /* Ajuste a largura para telas menores */
+  }
+
+  .user-item{
+    display: flex;
+    width: 100%;
+  }
+  
+  .user-table {
+    display: flex;
+    display: block;
+    overflow-x: auto;
+  }
+  .user-table th, .user-table td {
+    display: flex;
+    font-size: 14px; /* Ajuste o tamanho da fonte */
+    padding: 2px; /* Reduz o padding para melhor visualização */
+  }
+  .user-table button {
+    display: flex;
+    flex-direction: column;
+    padding: 6px 8px; /* Ajuste o padding dos botões */
+    font-size: 12px; /* Ajuste o tamanho da fonte */
+  }
+}
+
+
+
+=================================================================================================
+
+
 Home.jsx:
 import React, { useContext, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
 import { AuthContext } from '../../context/AuthContext';
 import './Home.css';
@@ -1710,50 +1977,50 @@ import Alerts, { showSuccessToast, showErrorToast } from '../../components/layou
 
 function Home() {
   const { currentUser, isLoading, error } = useContext(AuthContext);
-  const [tasks, setTasks] = useState([]);
-  const [newTask, setNewTask] = useState('');
+  const [projects, setProjects] = useState([]);
+  const [newProject, setNewproject] = useState('');
   const [showCompleted, setShowCompleted] = useState(false);
 
   useEffect(() => {
-    const fetchTasks = async () => {
+    const fetchProjects = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:5000/api/tasks', {
+        const response = await fetch('https://mytask-ze7d.onrender.com/api/projects', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
         const data = await response.json();
-        setTasks(data);
+        setProjects(data);
       } catch (err) {
         console.error('Erro ao carregar tarefas:', err);
         showErrorToast('Erro ao carregar tarefas!');
       }
     };
-    fetchTasks();
+    fetchProjects();
   }, []);
 
-  const handleNewTaskChange = (event) => {
-    setNewTask(event.target.value);
+  const handleNewprojectChange = (event) => {
+    setNewproject(event.target.value);
   };
 
-  const handleAddTask = async (event) => {
+  const handleAddProject = async (event) => {
     event.preventDefault();
-    if (newTask.trim() !== '') {
+    if (newProject.trim() !== '') {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:5000/api/tasks', {
+        const response = await fetch('https://mytask-ze7d.onrender.com/api/projects', {
           method: 'POST',
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ task: newTask }),
+          body: JSON.stringify({ project: newProject }),
         });
         if (response.ok) {
-          const newTaskData = await response.json();
-          setTasks([...tasks, newTaskData]);
-          setNewTask('');
+          const newProjectData = await response.json();
+          setProjects([...projects, newProjectData]);
+          setNewproject('');
           showSuccessToast('Tarefa adicionada!');
         } else {
           showErrorToast('Erro ao adicionar tarefa!');
@@ -1765,17 +2032,17 @@ function Home() {
     }
   };
 
-  const handleDeleteTask = async (taskId) => {
+  const handleDeleteProject = async (projectId) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/tasks/${taskId}`, {
+      const response = await fetch(`https://mytask-ze7d.onrender.com/api/projects/${projectId}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       if (response.ok) {
-        setTasks(tasks.filter((task) => task.id !== taskId));
+        setProjects(projects.filter((project) => project.id !== projectId));
         showSuccessToast('Tarefa deletada!');
       } else {
         showErrorToast('Erro ao deletar tarefa!');
@@ -1786,20 +2053,20 @@ function Home() {
     }
   };
 
-  const handleToggleTaskComplete = async (taskId) => {
+  const handleToggleProjectComplete = async (projectId) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/tasks/${taskId}/complete`, {
+      const response = await fetch(`https://mytask-ze7d.onrender.com/api/projects/${projectId}/complete`, {
         method: 'PUT',
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       if (response.ok) {
-        const updatedTasks = tasks.map((task) =>
-          task.id === taskId ? { ...task, completed: !task.completed } : task
+        const updatedProjects = projects.map((project) =>
+          project.id === projectId ? { ...project, completed: !project.completed } : project
         );
-        setTasks(updatedTasks);
+        setProjects(updatedProjects);
         showSuccessToast('Tarefa concluída!');
       } else {
         showErrorToast('Erro ao atualizar tarefa!');
@@ -1818,27 +2085,27 @@ function Home() {
     <Layout>
       <Alerts />
       <div className="home-container">
-        <div className="task-header">
+        <div className="project-header">
           <div className="welcome-title">
-            <h1>Gerenciador de Tarefas</h1>
+            <h1>Gerenciador de Projetos</h1>
             {currentUser && <p>Bem-vindo, {currentUser.email}!</p>}
           </div>
-          <div className="add-task-input">
+          <div className="add-project-input">
             <input
               type="text"
               className="form-control"
-              placeholder="Adicionar nova tarefa"
-              value={newTask}
-              onChange={handleNewTaskChange}
+              placeholder="Adicionar novo projeto"
+              value={newProject}
+              onChange={handleNewprojectChange}
               onKeyDown={(event) => {
-                if (event.key === 'Enter' && newTask.trim() !== '') {
+                if (event.key === 'Enter' && newProject.trim() !== '') {
                   event.preventDefault();
-                  handleAddTask(event);
+                  handleAddProject(event);
                 }
               }}
             />
             <div className='btn-group-header'>
-              <button className="btn btn-primary add-task-button" onClick={handleAddTask}>
+              <button className="btn btn-primary add-project-button" onClick={handleAddProject}>
                 Adicionar
               </button>
               <button className={`toggle-completed-button btn ${showCompleted ? 'btn-orange' : 'btn-green'}`} onClick={handleShowCompleted}>
@@ -1848,34 +2115,42 @@ function Home() {
           </div>
         </div>
 
-        <div className="task-list">
+        <div className="project-list">
           <div className="col-12">
             {isLoading ? (
-              <p>Carregando tarefas...</p>
+              <p>Carregando projetos...</p>
             ) : error ? (
-              <p>Erro ao carregar tarefas: {error.message}</p>
+              <p>Erro ao carregar projetos: {error.message}</p>
             ) : (
               <ul className="list-group">
-                {tasks
-                  .filter((task) => (showCompleted ? task.completed : !task.completed))
-                  .map((task) => (
-                    <li key={task.id} className="list-group-item task-item d-flex justify-content-between align-items-center">
-                      {task.task}
-                      <div>
-                        <button
-                          className="btn btn-success btn-sm mr-2 task-done-button"
-                          onClick={() => handleToggleTaskComplete(task.id)}
-                        >
-                          Fiz
-                        </button>
-                        <button
-                          className="btn btn-danger btn-sm task-delete-button"
-                          onClick={() => handleDeleteTask(task.id)}
-                        >
-                          Excluir
-                        </button>
-                      </div>
-                    </li>
+                {projects
+                  .filter((project) => (showCompleted ? project.completed : !project.completed))
+                  .map((project) => (
+                    <Link key={project.id} to={`/project/${project.id}`}>
+                      <li className="list-group-item project-item d-flex justify-content-between align-items-center">
+                        {project.project}
+                        <div>
+                          <button
+                            className="btn btn-success btn-sm mr-2 project-done-button"
+                            onClick={(e) => {
+                              e.preventDefault(); // Impede a navegação ao clicar no botão "Fiz"
+                              handleToggleProjectComplete(project.id);
+                            }}
+                          >
+                            Fiz
+                          </button>
+                          <button
+                            className="btn btn-danger btn-sm project-delete-button"
+                            onClick={(e) => {
+                              e.preventDefault(); // Impede a navegação ao clicar no botão "Excluir"
+                              handleDeleteProject(project.id);
+                            }}
+                          >
+                            Excluir
+                          </button>
+                        </div>
+                      </li>
+                    </Link>
                   ))}
               </ul>
             )}
@@ -2004,14 +2279,6 @@ a.nav-link{
     right: 0;
 	opacity:.20;
 }  
-
-.intro {
-	text-align:center;
-    color: var(--main-fonts-color);
-	z-index: 1;
-	margin: auto;
-	padding: 20px;
-}
 
 .intro  p{
     margin: 5px;
@@ -2243,297 +2510,815 @@ footer {
 
 
 Home.css:
-.home-container { /* Principal container da página Home */
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  width: 90vw;
-  height: 90vh;
+/* Home.css */
+
+.home-container { 
+  top: 162px;
+  left: 77px;
+  width: 100vw;
+  min-width: 1235px;
+  max-width: 1230px;
+  min-height: 520px;
+  max-height: 520px;
   overflow-y: hidden; 
-  color: #2ffbfe; /* Cor do texto azul claro */
-  border-radius: 8px; /* Arredondamento das bordas */
-  padding: 10px;
-  margin-top: 0px; /* Adjust this based on your Layout header height */
-  padding-top: 40px; /* Adjust this based on the height of your task header */
+  border-radius: 3px; 
+  padding: 20px;
+  margin-top: 38px; 
+  margin-left: 22px;
+  padding-top: 10px; 
+  margin-bottom: 0px;
   padding-bottom: 0px;
 }
 
-
-.task-header { /* Cabeçalho da seção de tarefas */
+.project-header { 
   display: flex;
   flex-direction: column;
-  margin-bottom: 5px;
-  top: 70px; /* Adjust this value to match the height of your Layout header */
+  margin-bottom: 0px;
+  top: 70px; 
   width: 100%;
-  z-index: 10; /* Ensure it stays on top of other elements */
-  padding: 0px ;
+  z-index: 10;
+  padding: 0px;
 }
 
-
-.btn-group-header{
+.btn-group-header {
   display: flex;
-  justify-content: center; /* Centraliza os botões horizontalmente */
+  justify-content: center; 
 }
 
-
-.welcome-title { /* Título de boas-vindas */
+.welcome-title { 
+  display: flex;
+  align-items:baseline;
+  gap: 10px;
   text-align: center;
-  margin-bottom: 10px;
-  white-space: nowrap;;
-}
-
-
-.welcome-title p{
-  color: #fff;
-}
-
-.add-task-input { /* Input para adicionar tarefas */
-  display: flex;
-  align-items: center;
-  width: 100%;
-  
-}
-
-.add-task-input .form-control {
-  background-color: #232a38bb; /* Cor de fundo do input */
-  color: #f2f2f2; /* Cor do texto do input */
-  border: 2px solid #2ffbfe; /* Borda do input */
-  border-radius: 3px; /* Arredondamento das bordas do input */
-  flex: 1;
-}
-
-.add-task-input .form-control::placeholder {
-  color: #6e778abb; /* Cor da placeholder desejada */
-}
-
-.add-task-button { /* Botão "Adicionar" */
-  background-color: #1f9398; /* Cor do botão */
-  color: #fff; /* Cor do texto do botão */
-  border: none; /* Sem borda no botão */
-  border-radius: 3px; /* Arredondamento das bordas do botão */
-  transition: background-color 0.2s ease; /* Transição suave da cor */
-  margin-left: 10px; /* Espaçamento entre o input e o botão */
-}
-
-.add-task-button:hover {
-  background-color: #26b7be; /* Cor do botão ao passar o mouse */
-}
-
-.toggle-completed-button { /* Botão para alternar entre tarefas concluídas e pendentes */
-  background-color: #1f9398; /* Cor do botão */
-  color: #fff; /* Cor do texto do botão */
-  border: none; /* Sem borda no botão */
-  border-radius: 3px; /* Arredondamento das bordas do botão */
-  transition: background-color 0.2s ease; /* Transição suave da cor */
-  margin-left: 10px; /* Espaçamento entre o input e o botão */
+  margin-bottom: 0px;
   white-space: nowrap;
 }
 
+.welcome-title h1 {
+  color: var(--main-fonts-color);
+  font-size: 2rem;
+}
+
+.welcome-title p {
+  color: var(--blue-fonts-color);
+}
+
+.add-project-input { 
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.add-project-input .form-control {
+  background-color: var(--main-background);
+  color: var(--main-fonts-color);
+  border: 2px solid var(--main-blue-border-shadow);
+  border-radius: 3px; 
+  flex: 1;
+}
+
+.add-project-input .form-control::placeholder {
+  color: #6e778abb; 
+}
+
+.add-project-button, 
+.toggle-completed-button { 
+  background-color: #1f9398; 
+  color: #fff; 
+  border: none;
+  border-radius: 3px; 
+  transition: background-color 0.2s ease; 
+  margin-left: 10px; 
+  white-space: nowrap;
+}
+
+.add-project-button:hover,
 .toggle-completed-button:hover {
-  background-color: #26b7be; /* Cor do botão ao passar o mouse */
+  background-color: #26b7be; 
 }
 
-.task-list { /* Lista de tarefas */
-  position: sticky; /* Corrigido para 'block' */
-  margin-top: 20px;
-  height: calc(100vh - 40%); /* Ajusta a altura da lista de tarefas para caber no restante da tela */
-  padding-top: 0px; /* Espaçamento para o cabeçalho fixo */
-  overflow-y: auto;
-}
-
-.col-12{
-  overflow-y: auto;
-}
-
-.list-group{
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.task-item { /* Item da lista de tarefas */
-  background-color: #1e2737; /* Cor de fundo dos itens da lista */
-  color: #2ffbfe; /* Cor do texto dos itens da lista */
-  border: none; /* Sem borda nos itens da lista */
-  border-radius: 3px; /* Arredondamento das bordas dos itens da lista */
-  height: 50px;
-}
-
-.task-done-button { /* Botão "Fiz" */
-  background-color: #4CAF50; /* Verde */
-}
-
-.task-done-button:hover {
-  background-color: #45a049; /* Verde mais escuro */
-}
-
-.task-delete-button { /* Botão "Excluir" */
-  background-color: #f44336; /* Vermelho */
-}
-
-.task-delete-button:hover {
-  background-color: #d32f2f; /* Vermelho mais escuro */
-}
-
-.task-list ul{
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  padding: 0;
-}
-
-.task-list li {
-  background-color: #141c29ce; /* Cor de fundo dos itens da lista */
-  color: #2ffbfe; /* Cor do texto dos itens da lista */
-  border: none; /* Sem borda nos itens da lista */
-  border-radius: 3px; /* Arredondamento das bordas dos itens da lista */
-  padding: 10px;
-}
-
-.task-list li:hover{
-  background-color: #1b2434ce;
-}
-
-.task-list button{
-  padding: 5px 15px;
-  margin: 0 5px;
-  font-size: 1rem;
-}
-
-.task-list li div {
-  display: flex;
-  gap: 10px;
-}
-
-.task-list li button {
-  border: none;
-  border-radius: 5px;
-  font-size: 1rem;
-}
-
-.task-list li button:hover{
-  opacity: .7;
-}
-/* Estilo moderno para a barra de rolagem */
-::-webkit-scrollbar {
-  width: 10px;
-}
-
-::-webkit-scrollbar-track {
-  background: #111822; /* Cor de fundo da barra de rolagem */
-}
-
-::-webkit-scrollbar-thumb {
-  background: #888; /* Cor do botão da barra de rolagem */
-  border-radius: 10px; /* Arredonda as bordas do botão */
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #555; /* Cor do botão ao passar o mouse */
-}
-
-.task-list button{
-  display: inline-block; /* Impedir que os botões ocupem a linha inteira */
-  border: none;
-  border-radius: 5px;
-  font-size: 1rem;
-  padding: 5px 15px;
-  margin: 0 5px; /* Adicionar margem para espaçamento */
-}
-
-.task-list button:hover {
-  opacity: 0.7; /* Diminuir a opacidade ao passar o mouse */
-}
-
-.toggle-completed-button{
+.toggle-completed-button {
   background-color: #ff8c00;
   color: #000;
 }
 
-.toggle-completed-button:hover{
+.toggle-completed-button:hover {
   background-color: #ffa000;
 }
 
-.btn-orange { /* Style for the "Mostrar Pendentes" button */
-  background-color: #ff8c00; /* Orange */
-  color: #000; /* Black text */
+.btn-orange { 
+  background-color: #ff8c00; 
+  color: #000; 
 }
 
 .btn-orange:hover {
-  background-color: #ffa000; /* Darker orange */
+  background-color: #ffa000; 
 }
 
-.btn-green { /* Style for the "Mostrar Concluídas" button */
-  background-color: #4CAF50; /* Green */
-  color: #fff; /* White text */
+.btn-green { 
+  background-color: #4CAF50; 
+  color: #fff;
 }
 
 .btn-green:hover {
-  background-color: #45a049; /* Darker green */
+  background-color: #45a049; 
 }
 
+.col-12 {
+  display: flex;
+  overflow-y: auto;
+}
+
+.list-group {
+  display: flex;
+  width: 100%;
+  gap: 10px;
+}
+
+.project-list { 
+  display: flex;
+  margin-top: 20px;
+  height: 63vh; 
+  padding-top: 0px; 
+  overflow-y: auto;
+  padding: 0px;
+  
+}
+
+.project-list a li.project-item {  /* Seletor mais específico */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--third-font-family);
+  color: var(--main-fonts-color);
+  font-size: 1rem;
+  height: 50px;
+  cursor: pointer; 
+  text-decoration:none;
+  border-bottom: 2px solid var(--main-fonts-color);
+  background-color: transparent;
+}
+
+
+.project-list a li.project-item:hover {  /* Seletor mais específico */
+  
+  
+}
+
+.project-item.selected {
+  background-color: #26b7be;
+}
+
+.project-done-button { 
+  background-color: #4CAF50; 
+}
+
+.project-done-button:hover {
+  background-color: #45a049;
+}
+
+.project-delete-button { 
+  background-color: #f44336;
+}
+
+.project-delete-button:hover {
+  background-color: #d32f2f;
+}
+
+.project-list li div {
+  display: flex;
+  gap: 10px;
+}
+
+.project-list button { 
+  display: inline-block;
+  border-radius: 10px;
+  font-size: 1rem;
+  padding: 5px 15px;
+  margin: 0 5px;
+}
+
+.project-list button:hover {
+  opacity: 0.7; 
+}
+
+/* Media Queries */
 @media (max-width: 968px) {
-  .home-container { /* Principal container da página Home */
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    width: 90vw;
+  .home-container { 
     height: 90vh;
-    overflow-y: hidden; 
-    color: #2ffbfe; /* Cor do texto azul claro */
-    border-radius: 8px; /* Arredondamento das bordas */
-    padding: 10px;
-    padding-top: 0px; /* Adjust this based on the height of your task header */
-    padding-bottom: 0px;
+    padding-top: 0px; 
   }
 
-  .task-header {
+  .project-header {
     margin: 0;
-    padding: 20 px; /* Reduz o padding para telas menores */
-    width: 100%; /* Ocupa toda a largura da tela */
-    text-align: center; /* Centraliza o texto */
-
+    padding: 20px; 
+    width: 100%;
+    text-align: center; 
   }
 
-  .btn-group-header{
-    display: flex;
-    width: 100%; /* Ocupa toda a largura da tela */
-    justify-content: center; /* Centraliza os botões horizontalmente */
+  .btn-group-header {
+    width: 100%; 
+    justify-content: center;
     margin-top: 10px;
   }
 
-  .add-task-input {
+  .add-project-input {
     padding: 0;
     width: 100%;
-    flex-direction: column; /* Empilha o input e o botão verticalmente */
-    align-items: center; /* Centraliza o input e o botão */
+    flex-direction: column; 
+    align-items: center; 
     margin-bottom: 10px;
   }
 
-  
-
-  .task-list {
+  .project-list {
     padding: 0;
-    width: 100%; /* Ocupa toda a largura da tela */
-    height: calc(100vh - 200px); /* Ajusta a altura da lista */
+    width: 100%; 
+    height: auto;
   }
 
-  .task-item {
-    flex-direction: column; /* Empilha o texto e os botões verticalmente */
-    align-items: center; /* Centraliza o texto e os botões */
-    height: 130px;
-  }
-
-
-
-  .task-item div {
+  .project-item {
+    text-align: left;
     width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center; /* Centraliza os botões */
-    margin-top: 10px;
+    align-items: center; 
+    height: auto;
+    padding: 20px;
+    gap: 10px;
+  }
+
+  .button-project-item {
+    right: 10px;
+    gap: 30px;
+    margin: 0;
+    padding: 0;
+  }
+
+  .button-project-item button {
+    margin: 0;
   }
 }
+
+=======================================================================================================
+
+
+Project.jsx:
+import React, { useState, useEffect, useRef, useContext } from 'react';
+import { useParams } from 'react-router-dom';
+import { AuthContext } from '../../context/AuthContext';
+import Layout from '../../components/layout/Layout';
+import './Project.css';
+import Alerts, { showSuccessToast, showErrorToast } from '../../components/layout/Alerts';
+
+const Project = () => {
+  const { projectId } = useParams();
+  const [sections, setSections] = useState([]);
+  const [newSectionName, setNewSectionName] = useState('');
+  const [isAddingSection, setIsAddingSection] = useState(false);
+  const [projectName, setProjectName] = useState('');
+  const addSectionFormRef = useRef(null);
+
+  useEffect(() => {
+    const fetchProjectData = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`https://mytask-ze7d.onrender.com/api/projects/${projectId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          const projectData = await response.json();
+          setProjectName(projectData.project);
+        } else {
+          console.error('Erro ao buscar dados do projeto.');
+          showErrorToast('Erro ao buscar dados do projeto.');
+        }
+      } catch (err) {
+        console.error('Erro ao buscar dados do projeto:', err);
+        showErrorToast('Erro ao buscar dados do projeto.');
+      }
+    };
+
+    if (projectId) {
+      fetchProjectData();
+    }
+  }, [projectId]);
+
+  useEffect(() => {
+    const fetchSections = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`https://mytask-ze7d.onrender.com/api/projects/${projectId}/sections`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setSections(data);
+        } else {
+          console.error('Erro ao carregar seções.');
+          showErrorToast('Erro ao carregar seções.');
+        }
+      } catch (err) {
+        console.error('Erro ao carregar seções:', err);
+        showErrorToast('Erro ao carregar seções.');
+      }
+    };
+
+    if (projectId) {
+      fetchSections();
+    }
+  }, [projectId]);
+
+  const handleAddSection = async () => {
+    if (newSectionName.trim() !== '') {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`https://mytask-ze7d.onrender.com/api/projects/${projectId}/sections`, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ name: newSectionName }),
+        });
+
+        if (response.ok) {
+          const newSection = await response.json();
+          setSections([...sections, newSection]);
+          setNewSectionName('');
+          setIsAddingSection(false);
+          showSuccessToast('Seção adicionada com sucesso!');
+        } else {
+          console.error('Erro ao adicionar seção.');
+          showErrorToast('Erro ao adicionar seção.');
+        }
+      } catch (err) {
+        console.error('Erro ao adicionar seção:', err);
+        showErrorToast('Erro ao adicionar seção.');
+      }
+    }
+  };
+
+  const handleDeleteSection = async (sectionId) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(
+        `https://mytask-ze7d.onrender.com/api/projects/${projectId}/sections/${sectionId}`,
+        {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        setSections(sections.filter((section) => section.id !== sectionId));
+        showSuccessToast('Seção excluída com sucesso!');
+      } else {
+        console.error('Erro ao excluir seção.');
+        showErrorToast('Erro ao excluir seção.');
+      }
+    } catch (err) {
+      console.error('Erro ao excluir seção:', err);
+      showErrorToast('Erro ao excluir seção.');
+    }
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        addSectionFormRef.current &&
+        !addSectionFormRef.current.contains(event.target) &&
+        !event.target.classList.contains('add-section-input') &&
+        !event.target.classList.contains('add-section-button-salvar')
+      ) {
+        setIsAddingSection(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [addSectionFormRef]);
+
+  return (
+    <Layout>
+      <Alerts />
+      <div className="project-container">
+        <h1>{projectName}</h1>
+
+        <div className="sections-container" ref={addSectionFormRef}>
+          {sections.map((section) => (
+            <SectionColumn
+              key={section.id}
+              section={section}
+              onDelete={handleDeleteSection}
+              projectId={projectId}
+            />
+          ))}
+
+          {!isAddingSection ? (
+            <button className="add-section-button" onClick={() => setIsAddingSection(true)}>
+              Adicionar lista
+            </button>
+          ) : (
+            <div className="add-section-form animate-slide-in">
+              <input
+                type="text"
+                placeholder="Nome da lista"
+                value={newSectionName}
+                onChange={(e) => setNewSectionName(e.target.value)}
+                className="add-section-input"
+                ref={addSectionFormRef}
+              />
+              <div className="add-section-buttons">
+                <button className="add-section-button-salvar" ref={addSectionFormRef} onClick={handleAddSection}>
+                  Salvar
+                </button>
+                <button ref={addSectionFormRef} onClick={() => setIsAddingSection(false)}>
+                  Cancelar
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </Layout>
+  );
+};
+
+const SectionColumn = ({ section, onDelete, projectId }) => {
+  const [tasks, setTasks] = useState([]);
+  const [newTaskTitle, setNewTaskTitle] = useState('');
+  const [isAddingTask, setIsAddingTask] = useState(false);
+  const { currentUser } = useContext(AuthContext);
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const userId = currentUser ? currentUser.id : null;
+
+        if (!userId) {
+          console.error('Usuário não autenticado!');
+          return;
+        }
+
+        const response = await fetch(
+          `https://mytask-ze7d.onrender.com/api/projects/${projectId}/sections/${section.id}/tasks`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          setTasks(data);
+        } else {
+          console.error('Erro ao carregar tarefas.');
+          showErrorToast('Erro ao carregar tarefas.');
+        }
+      } catch (err) {
+        console.error('Erro ao carregar tarefas:', err);
+        showErrorToast('Erro ao carregar tarefas.');
+      }
+    };
+
+    fetchTasks();
+  }, [projectId, section.id, currentUser]);
+
+  const handleAddTask = async () => {
+    if (newTaskTitle.trim() !== '') {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(
+          `https://mytask-ze7d.onrender.com/api/projects/${projectId}/sections/${section.id}/tasks`,
+          {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ title: newTaskTitle }),
+          }
+        );
+
+        if (response.ok) {
+          const newTask = await response.json();
+          setTasks([...tasks, newTask]);
+          setNewTaskTitle('');
+          setIsAddingTask(false);
+          showSuccessToast('Tarefa adicionada com sucesso!');
+        } else {
+          console.error('Erro ao adicionar tarefa.');
+          showErrorToast('Erro ao adicionar tarefa.');
+        }
+      } catch (err) {
+        console.error('Erro ao adicionar tarefa:', err);
+        showErrorToast('Erro ao adicionar tarefa.');
+      }
+    }
+  };
+
+  const handleDeleteTask = async (taskId) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(
+        `https://mytask-ze7d.onrender.com/api/projects/${projectId}/sections/${section.id}/tasks/${taskId}`,
+        {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        setTasks(tasks.filter((task) => task.id !== taskId));
+        showSuccessToast('Tarefa excluída com sucesso!');
+      } else {
+        console.error('Erro ao excluir tarefa.');
+        showErrorToast('Erro ao excluir tarefa.');
+      }
+    } catch (err) {
+      console.error('Erro ao excluir tarefa:', err);
+      showErrorToast('Erro ao excluir tarefa.');
+    }
+  };
+
+  return (
+    <div className="section-column">
+      <div className="section-header">
+        <h2>{section.name}</h2>
+        <button onClick={() => onDelete(section.id)}>Excluir Seção</button>
+      </div>
+      <div className="tasks-container">
+        <div className="tasks-list">
+          {tasks.map((task) => (
+            <div key={task.id} className="task-card">
+              {task.title}
+              <button onClick={() => handleDeleteTask(task.id)}>Excluir</button>
+            </div>
+          ))}
+        </div>
+        {!isAddingTask && (
+          <button className="add-task-button" onClick={() => setIsAddingTask(true)}>
+            + Adicionar Tarefa
+          </button>
+        )}
+        {isAddingTask && (
+          <div className="add-task-form">
+            <input
+              type="text"
+              placeholder="Título da Tarefa"
+              value={newTaskTitle}
+              onChange={(e) => setNewTaskTitle(e.target.value)}
+            />
+            <div className="add-task-buttons">
+              <button onClick={handleAddTask}>Salvar</button>
+              <button onClick={() => setIsAddingTask(false)}>Cancelar</button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default Project;
+
+
+=========================================================================================================
+
+
+Project.css:
+/* Container Principal */
+.project-container {
+  top: 162px;
+  left: 77px;
+  width: 100vw;
+  min-width: 1235px;
+  max-width: 1230px;
+  min-height: 520px;
+  max-height: 520px;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  margin-top: 0px;
+}
+
+
+.project-container h1{
+  margin-top: 5px;
+  margin-bottom: 0;
+  padding: 10px;
+}
+
+/* Seções */
+.sections-container {
+  top: 162px;
+  left: 77px;
+  width: 100vw;
+  min-width: 1220px;
+  max-width: 1220px;
+  min-height: 455px;
+  max-height: 455px;
+  display: flex;
+  gap: 15px;
+  overflow-x: auto;
+  padding: 0;
+  margin: 0;
+  margin-left: 20px;
+}
+
+.section-column {
+  background-color: #ffffffd5;
+  border-radius: 15px;
+  max-width: 280px;
+  min-width: 280px;
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px;
+}
+
+/* Tarefas */
+.tasks-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  height: 100vh;
+  background-color: #ffffff;
+  border-radius: 15px;
+  padding: 10px;
+  position: relative;
+}
+
+.tasks-list {
+  flex: 1; /* Permite que a lista de tarefas cresça e ocupe o espaço disponível */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto; /* A rolagem vertical é aplicada apenas à lista */
+}
+
+.task-card {
+  background-color: #1e273798;
+  padding: 10px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  text-align: left;
+}
+
+/* Botões */
+.add-task-button,
+.add-section-button,
+.add-section-form button,
+.add-task-form button {
+  background-color: #1f9398;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.add-task-button:hover,
+.add-section-button:hover,
+.add-section-form button:hover,
+.add-task-form button:hover {
+  background-color: #26b7be;
+}
+
+.add-section-button {
+  min-width: 280px;
+  background-color: #71d2d6c8;
+  color: #ffffffdb;
+  margin-bottom: 10px;
+  align-self: flex-start;
+  white-space: nowrap;
+}
+
+.add-section-buttons{
+  display: flex;
+  justify-content: end;
+  gap: 10px;
+}
+
+.add-task-button {
+  align-self: center;
+  margin-top: auto;
+}
+
+/* Formulário de Adicionar Lista */
+.add-section-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 10px;
+  animation: fadeIn 0.3s ease; /* Animação de aparecimento */
+}
+
+.add-section-form input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  width: 280px; /* Largura fixa de 280px */
+}
+
+/* Formulário de Adicionar Tarefa */
+.add-task-form{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+}
+
+
+.add-task-button, .add-task-form button {
+  background-color: #1f9398;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.add-task-button:hover,
+.add-task-form button:hover {
+  background-color: #26b7be;
+}
+
+.add-task-form input {
+  flex: 1; 
+  padding:  0px 8px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 10px;
+}
+
+.add-task-buttons{
+  display: flex;
+  justify-content: right;
+  gap: 10px;
+}
+
+/* Animações */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Estilo moderno para a barra de rolagem */
+.sections-container::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+
+.sections-container::-webkit-scrollbar-track {
+  background: #888;
+}
+
+.sections-container::-webkit-scrollbar-thumb {
+  background: #26b7be;
+  border-radius: 10px;
+}
+
+.sections-container::-webkit-scrollbar-thumb:hover {
+  background: #32d7df;
+}
+
+
+
+
+==========================================================================================================
 
 
 terms.jsx:

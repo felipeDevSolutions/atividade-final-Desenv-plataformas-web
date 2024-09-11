@@ -2,21 +2,21 @@
     background-color: #2196F3; /* Azul do form.css */
     color: white;
     border: 2px solid #2196F3; /* Ajuste a borda conforme necessário */
-    border-radius: 5px; /* Ajuste o raio da borda conforme necessário */
+    border-radius: 5px; /* Ajusta o raio da borda conforme necessário */
   }
   
   .toast-error {
     background-color: #f44336; /* Vermelho do form.css */
     color: white;
-    border: 2px solid #f44336; /* Ajuste a borda conforme necessário */
-    border-radius: 5px; /* Ajuste o raio da borda conforme necessário */
+    border: 2px solid #f44336; /* Ajusta a borda conforme necessário */
+    border-radius: 5px; /* Ajusta o raio da borda conforme necessário */
   }
   
   .toast-warning {
     background-color: #ffeb3b; /* Amarelo para avisos */
     color: black;
-    border: 2px solid #ffeb3b; /* Ajuste a borda conforme necessário */
-    border-radius: 5px; /* Ajuste o raio da borda conforme necessário */
+    border: 2px solid #ffeb3b; /* Ajusta a borda conforme necessário */
+    border-radius: 5px; /* Ajusta o raio da borda conforme necessário */
   }
   
   /* Estilos adicionais para o conteúdo do Toast */

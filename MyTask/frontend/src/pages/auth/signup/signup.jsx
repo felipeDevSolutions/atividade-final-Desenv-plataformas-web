@@ -2,7 +2,6 @@ import { useState } from "react";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import Layout from '../../../components/layout/Layout';
-import "../signup/signup";
 import "../form.css";
 import Loading from '../../../components/Loading/Loading';
 import Alerts, { showSuccessToast, showErrorToast } from '../../../components/layout/Alerts';
@@ -29,7 +28,7 @@ const Signup = () => {
 
     setIsLoading(true);
 
-    axios.post('https://atividade-final-desenv-plataformas-1lfnfap2v.vercel.app/api/signup', { 
+    axios.post('https://mytask-ze7d.onrender.com/api/signup', { 
       email: emailSignup,
       password: passwordSignup
     })

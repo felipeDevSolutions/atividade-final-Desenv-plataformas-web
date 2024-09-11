@@ -15,7 +15,7 @@ function Home() {
     const fetchProjects = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:5000/api/projects', {
+        const response = await fetch('https://mytask-ze7d.onrender.com/api/projects', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -39,7 +39,7 @@ function Home() {
     if (newProject.trim() !== '') {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:5000/api/projects', {
+        const response = await fetch('https://mytask-ze7d.onrender.com/api/projects', {
           method: 'POST',
           headers: {
             Authorization: `Bearer ${token}`,
@@ -65,7 +65,7 @@ function Home() {
   const handleDeleteProject = async (projectId) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/projects/${projectId}`, {
+      const response = await fetch(`https://mytask-ze7d.onrender.com/api/projects/${projectId}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -86,7 +86,7 @@ function Home() {
   const handleToggleProjectComplete = async (projectId) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/projects/${projectId}/complete`, {
+      const response = await fetch(`https://mytask-ze7d.onrender.com/api/projects/${projectId}/complete`, {
         method: 'PUT',
         headers: {
           Authorization: `Bearer ${token}`,
